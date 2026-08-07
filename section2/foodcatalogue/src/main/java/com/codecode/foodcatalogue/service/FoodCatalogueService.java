@@ -2,13 +2,12 @@ package com.codecode.foodcatalogue.service;
 
 import com.codecode.foodcatalogue.dto.FoodCataloguePage;
 import com.codecode.foodcatalogue.dto.FoodItemDTO;
-import com.codecode.foodcatalogue.dto.Restaurant;
+import com.codecode.foodcatalogue.dto.RestaurantDTO;
 import com.codecode.foodcatalogue.entity.FoodItem;
 import com.codecode.foodcatalogue.repository.FoodItemRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,24 +49,24 @@ public class FoodCatalogueService {
 
     public ResponseEntity<FoodCataloguePage> fetchFoodCataloguePageDetails(Integer restaurantId) {
         List<FoodItem> foodItemList = fetchFoodItemList(restaurantId);
-        Restaurant restaurant = fetchRestaurantDetailsFromRestaurantMS(restaurantId);
-        if (restaurant != null) {
-            FoodCataloguePage foodCataloguePage = createFoodCataloguePage(foodItemList, restaurant);
+        RestaurantDTO restaurantDTO = fetchRestaurantDetailsFromRestaurantMS(restaurantId);
+        if (restaurantDTO != null) {
+            FoodCataloguePage foodCataloguePage = createFoodCataloguePage(foodItemList, restaurantDTO);
             return new ResponseEntity<>(foodCataloguePage, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    private FoodCataloguePage createFoodCataloguePage(List<FoodItem> foodItemList, Restaurant restaurant) {
+    private FoodCataloguePage createFoodCataloguePage(List<FoodItem> foodItemList, RestaurantDTO restaurantDTO) {
         FoodCataloguePage foodCataloguePage = new FoodCataloguePage();
         foodCataloguePage.setFoodItemList(foodItemList);
-        foodCataloguePage.setRestaurant(restaurant);
+        foodCataloguePage.setRestaurantDTO(restaurantDTO);
         return foodCataloguePage;
     }
 
     //fetch data from another service registered to the Eureka Server
-    private Restaurant fetchRestaurantDetailsFromRestaurantMS(Integer restaurantId) {
-        return restTemplate.getForObject(url + restaurantId, Restaurant.class);
+    private RestaurantDTO fetchRestaurantDetailsFromRestaurantMS(Integer restaurantId) {
+        return restTemplate.getForObject(url + restaurantId, RestaurantDTO.class);
     }
 
     private List<FoodItem> fetchFoodItemList(Integer restaurantId) {

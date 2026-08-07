@@ -20,7 +20,7 @@
         </processorPath>
         <module name="restaurantlisting" />
       </profile>
-      <profile name="Annotation profile for foodcatalogue" enabled="true">
+      <profile name="Annotation profile for order" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -28,6 +28,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
         <module name="userinfo" />
+        <module name="order" />
         <module name="foodcatalogue" />
       </profile>
     </annotationProcessing>
@@ -36,6 +37,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="eureka" options="-parameters" />
       <module name="foodcatalogue" options="-parameters" />
+      <module name="order" options="-parameters" />
       <module name="restaurantlisting" options="-parameters" />
       <module name="userinfo" options="-parameters" />
     </option>

@@ -1,12 +1,11 @@
-package com.codecode.foodcatalogue.dto;
+package com.codecode.order.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Restaurant {
+public class RestaurantDTO {
     private int id;
     private String name;
     private String address;
