@@ -14,7 +14,7 @@ export class FoodItemService {
     private apiFoodsUrl = API_URL_FC + '/foodCatalogue/fetchFoodItemListByRestaurantId/';
 
     constructor(private http: HttpClient) { }
-    // private http = inject(HttpClient);
+    //private http = inject(HttpClient);
 
     //fetch data from the backend, RxJS stream
     getFoodItemsByRestaurant(id: number): Observable<FoodCataloguePage> {

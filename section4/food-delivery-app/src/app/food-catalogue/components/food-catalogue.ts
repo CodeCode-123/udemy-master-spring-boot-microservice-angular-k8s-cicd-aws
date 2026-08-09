@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FoodItemService } from '../service/fooditem-service';
 import { RestaurantDTO } from '../../shared/model/restaurant';
 
+
 @Component({
   selector: 'app-food-catalogue',
   templateUrl: './food-catalogue.html',
@@ -17,8 +18,7 @@ export class FoodCatalogue implements OnInit {
   orderSummary: FoodCataloguePage;
   foodItemDTOList: FoodItemDTO[] = [];
   restaurantDTO: RestaurantDTO;
-  // private dataService = inject(FoodItemService);
-
+  
   constructor(private route: ActivatedRoute, private foodItemService: FoodItemService, private router: Router) {
   }
 
@@ -27,7 +27,7 @@ export class FoodCatalogue implements OnInit {
       const idParam = this.route.snapshot.paramMap.get('id');
       this.restaurantId = +(idParam ?? 0);
     });
-
+    
     const savedData = localStorage.getItem('foodItemsByRestaurantData/' + this.restaurantId);
     const savedFoodItemsList = localStorage.getItem('foodItemsListByRestaurantId/' + this.restaurantId);
     if (savedData && savedFoodItemsList) {

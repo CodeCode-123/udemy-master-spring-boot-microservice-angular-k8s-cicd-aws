@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RestaurantDTO } from '../../shared/model/restaurant';
 import { RestaurantService } from '../service/restaurant-service';
 import { Router } from '@angular/router';
@@ -7,9 +7,12 @@ import { Router } from '@angular/router';
   selector: 'app-restaurant-listing',
   templateUrl: './restaurant-listing.html',
   styleUrl: './restaurant-listing.css',
+  imports: [],
 })
 export class RestaurantListing implements OnInit {
   public restaurantList: RestaurantDTO[];
+  private router = inject(Router);
+  private restaurantService = inject(RestaurantService);
 
   ngOnInit() {
     //1. Try to load saved data from local storage first
@@ -23,7 +26,7 @@ export class RestaurantListing implements OnInit {
     }
   }
 
-  constructor(private router: Router, private restaurantService: RestaurantService) { }
+  //constructor(private router: Router, private restaurantService: RestaurantService) { }
 
   getAllRestaurants() {
     this.restaurantService.getAllRestaurants().subscribe(
