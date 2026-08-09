@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class FoodCataloguePage {
-    private List<FoodItem> foodItemList;
+    private List<FoodItemDTO> foodItemList;
     private RestaurantDTO restaurantDTO;
 }

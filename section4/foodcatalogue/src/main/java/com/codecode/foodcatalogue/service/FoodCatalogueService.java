@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,7 +49,7 @@ public class FoodCatalogueService {
     }
 
     public ResponseEntity<FoodCataloguePage> fetchFoodCataloguePageDetails(Integer restaurantId) {
-        List<FoodItem> foodItemList = fetchFoodItemList(restaurantId);
+        List<FoodItemDTO> foodItemList = fetchFoodItemList(restaurantId);
         RestaurantDTO restaurantDTO = fetchRestaurantDetailsFromRestaurantMS(restaurantId);
         if (restaurantDTO != null) {
             FoodCataloguePage foodCataloguePage = createFoodCataloguePage(foodItemList, restaurantDTO);
@@ -57,7 +58,7 @@ public class FoodCatalogueService {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    private FoodCataloguePage createFoodCataloguePage(List<FoodItem> foodItemList, RestaurantDTO restaurantDTO) {
+    private FoodCataloguePage createFoodCataloguePage(List<FoodItemDTO> foodItemList, RestaurantDTO restaurantDTO) {
         FoodCataloguePage foodCataloguePage = new FoodCataloguePage();
         foodCataloguePage.setFoodItemList(foodItemList);
         foodCataloguePage.setRestaurantDTO(restaurantDTO);
@@ -69,7 +70,12 @@ public class FoodCatalogueService {
         return restTemplate.getForObject(url + restaurantId, RestaurantDTO.class);
     }
 
-    private List<FoodItem> fetchFoodItemList(Integer restaurantId) {
-        return foodItemRepo.findByRestaurantId(restaurantId);
+    private List<FoodItemDTO> fetchFoodItemList(Integer restaurantId) {
+        List<FoodItem> foodItemList = foodItemRepo.findByRestaurantId(restaurantId);
+        List<FoodItemDTO> foodItemDTOList = new ArrayList<>();
+        for (FoodItem foodItem : foodItemList) {
+            foodItemDTOList.add(mapFoodItemToFoodItemDTO(foodItem));
+        }
+        return foodItemDTOList;
     }
 }

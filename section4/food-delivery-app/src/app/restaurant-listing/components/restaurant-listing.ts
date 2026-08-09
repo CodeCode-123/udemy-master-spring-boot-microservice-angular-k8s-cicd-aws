@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Restaurant } from '../../shared/model/restaurant';
+import { Component, OnInit } from '@angular/core';
+import { RestaurantDTO } from '../../shared/model/restaurant';
 import { RestaurantService } from '../service/restaurant-service';
 import { Router } from '@angular/router';
 
@@ -8,11 +8,19 @@ import { Router } from '@angular/router';
   templateUrl: './restaurant-listing.html',
   styleUrl: './restaurant-listing.css',
 })
-export class RestaurantListing {
-  public restaurantList: Restaurant[];
+export class RestaurantListing implements OnInit {
+  public restaurantList: RestaurantDTO[];
 
   ngOnInit() {
-    this.getAllRestaurants();
+    //1. Try to load saved data from local storage first
+    const savedData = localStorage.getItem('allRestaurantsData');
+    if (savedData) {
+      //if data is found in the local storage, set it to the restaurantList
+      this.restaurantList = JSON.parse(savedData);
+    } else {
+      //otherwise, load from the backend
+      this.getAllRestaurants();
+    }
   }
 
   constructor(private router: Router, private restaurantService: RestaurantService) { }
@@ -21,6 +29,8 @@ export class RestaurantListing {
     this.restaurantService.getAllRestaurants().subscribe(
       data => {
         this.restaurantList = data;
+        //after retrieved the data from the backend, save it to the local storage
+        localStorage.setItem('allRestaurantsData', JSON.stringify(this.restaurantList));
       }
     )
   }

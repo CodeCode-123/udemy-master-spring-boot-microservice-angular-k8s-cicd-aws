@@ -1,7 +1,7 @@
 <main class="main-content my-gap">
   <div class="restaurant-grid">
-    <div class="restaurant-card">
-      @for (restaurant of restaurantList; track restaurant.id) {
+    @for (restaurant of restaurantList; track restaurant.id) {
+      <div class="restaurant-card">
         <div class="restaurant-image">
           <img [src]="'/restaurant-pics/' + getRandomImage()" alt="Restaurant 1" />
         </div>
@@ -13,7 +13,7 @@
           </div>
           <button class="order-btn" (click)="onButtonClick(restaurant.id)">Order Now</button>
         </div>
-      }
-    </div>
+      </div>
+    }
   </div>
 </main>

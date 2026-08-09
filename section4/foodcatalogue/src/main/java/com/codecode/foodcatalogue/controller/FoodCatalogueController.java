@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/foodCatalogue")
+@CrossOrigin
 public class FoodCatalogueController {
     private final FoodCatalogueService foodCatalogueService;
 
