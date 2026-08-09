@@ -1,7 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { API_URL_FC } from "../../constants/url";
 import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, throwError } from "rxjs";
+import { FoodCataloguePage } from "../../shared/model/foodcataloguepage";
+import { FoodItemDTO } from "../../shared/model/fooditem";
 
 
 @Injectable({
@@ -9,12 +11,21 @@ import { Observable, catchError, throwError } from "rxjs";
 })
 export class FoodItemService {
     private apiUrl = API_URL_FC + '/foodCatalogue/fetchRestaurantAndFoodItemsById/';
+    private apiFoodsUrl = API_URL_FC + '/foodCatalogue/fetchFoodItemListByRestaurantId/';
 
     constructor(private http: HttpClient) { }
+    // private http = inject(HttpClient);
 
     //fetch data from the backend, RxJS stream
-    getFoodItemsByRestaurant(id: number): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl+id}`)
+    getFoodItemsByRestaurant(id: number): Observable<FoodCataloguePage> {
+        return this.http.get<FoodCataloguePage>(`${this.apiUrl+id}`)
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getFoodItemsListByRestaurant(id: number): Observable<FoodItemDTO[]> {
+        return this.http.get<FoodItemDTO[]>(`${this.apiFoodsUrl+id}`)
         .pipe(
             catchError(this.handleError)
         );
@@ -24,4 +35,5 @@ export class FoodItemService {
         console.error('An error occurred: ', error);
         return throwError(() => new Error(error.message || error));
     }
+
 }

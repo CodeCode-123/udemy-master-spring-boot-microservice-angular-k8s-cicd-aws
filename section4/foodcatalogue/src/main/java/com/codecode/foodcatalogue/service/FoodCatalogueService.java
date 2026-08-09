@@ -70,7 +70,7 @@ public class FoodCatalogueService {
         return restTemplate.getForObject(url + restaurantId, RestaurantDTO.class);
     }
 
-    private List<FoodItemDTO> fetchFoodItemList(Integer restaurantId) {
+    public List<FoodItemDTO> fetchFoodItemList(Integer restaurantId) {
         List<FoodItem> foodItemList = foodItemRepo.findByRestaurantId(restaurantId);
         List<FoodItemDTO> foodItemDTOList = new ArrayList<>();
         for (FoodItem foodItem : foodItemList) {

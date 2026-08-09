@@ -2,11 +2,14 @@ package com.codecode.foodcatalogue.controller;
 
 import com.codecode.foodcatalogue.dto.FoodCataloguePage;
 import com.codecode.foodcatalogue.dto.FoodItemDTO;
+import com.codecode.foodcatalogue.entity.FoodItem;
 import com.codecode.foodcatalogue.service.FoodCatalogueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/foodCatalogue")
@@ -28,5 +31,11 @@ public class FoodCatalogueController {
     @GetMapping("/fetchRestaurantAndFoodItemsById/{restaurantId}")
     public ResponseEntity<FoodCataloguePage> fetchRestaurantAndFoodItems(@PathVariable Integer restaurantId) {
         return foodCatalogueService.fetchFoodCataloguePageDetails(restaurantId);
+    }
+
+    @GetMapping("/fetchFoodItemListByRestaurantId/{restaurantId}")
+    public ResponseEntity<List<FoodItemDTO>> fetchFoodItemListByRestaurantId(@PathVariable Integer restaurantId) {
+        List<FoodItemDTO> res = foodCatalogueService.fetchFoodItemList(restaurantId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

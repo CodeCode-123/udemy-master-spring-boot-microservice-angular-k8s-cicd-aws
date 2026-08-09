@@ -1,14 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FoodCataloguePage } from '../../shared/model/foodcataloguepage';
 import { FoodItemDTO } from '../../shared/model/fooditem';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FoodItemService } from '../service/fooditem-service';
 import { RestaurantDTO } from '../../shared/model/restaurant';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-food-catalogue',
-  imports: [],
   templateUrl: './food-catalogue.html',
   styleUrl: './food-catalogue.css',
 })
@@ -17,24 +15,27 @@ export class FoodCatalogue implements OnInit {
   foodItemResponse: FoodCataloguePage;
   foodItemCart: FoodItemDTO[] = [];
   orderSummary: FoodCataloguePage;
+  foodItemDTOList: FoodItemDTO[] = [];
+  restaurantDTO: RestaurantDTO;
+  // private dataService = inject(FoodItemService);
 
   constructor(private route: ActivatedRoute, private foodItemService: FoodItemService, private router: Router) {
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.restaurantId = +(params.get('id') ?? 0);
+      const idParam = this.route.snapshot.paramMap.get('id');
+      this.restaurantId = +(idParam ?? 0);
     });
 
     const savedData = localStorage.getItem('foodItemsByRestaurantData/' + this.restaurantId);
-    if (savedData) {
+    const savedFoodItemsList = localStorage.getItem('foodItemsListByRestaurantId/' + this.restaurantId);
+    if (savedData && savedFoodItemsList) {
       this.foodItemResponse = JSON.parse(savedData);
-      const savedMenu = localStorage.getItem('foodMenuByRestaurantData/' + this.restaurantId);
-      if (savedMenu) {
-        this.foodItemResponse.foodItemsList = JSON.parse(savedMenu);
-      }
+      this.foodItemDTOList = JSON.parse(savedFoodItemsList);
     } else {
       this.getFoodItemsByRestaurant(this.restaurantId);
+      this.getFoodItemsList(this.restaurantId);
     }
   }
 
@@ -43,9 +44,17 @@ export class FoodCatalogue implements OnInit {
       data => {
         this.foodItemResponse = data;
         localStorage.setItem('foodItemsByRestaurantData/' + this.restaurantId, JSON.stringify(this.foodItemResponse));
-        localStorage.setItem('foodMenuByRestaurantData/' + this.restaurantId, JSON.stringify(this.foodItemResponse.foodItemsList));
       }
     )
+  }
+
+  getFoodItemsList(restaurant: number) {
+    this.foodItemService.getFoodItemsListByRestaurant(restaurant).subscribe(
+      data => {
+        this.foodItemDTOList = data;
+        localStorage.setItem('foodItemsListByRestaurantId/' + this.restaurantId, JSON.stringify(this.foodItemDTOList));
+      }
+    );
   }
 
   increment(food: any) {

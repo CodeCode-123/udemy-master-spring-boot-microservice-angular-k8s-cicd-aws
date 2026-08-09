@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { API_URL_RL } from '../../constants/url';
+import { RestaurantDTO } from '../../shared/model/restaurant';
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +13,8 @@ export class RestaurantService {
     constructor(private http: HttpClient) { }
 
     //fetch data from the backend, RxJS stream
-    getAllRestaurants(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}`)
+    getAllRestaurants(): Observable<RestaurantDTO[]> {
+        return this.http.get<RestaurantDTO[]>(`${this.apiUrl}`)
         .pipe(
             catchError(this.handleError)
         );
