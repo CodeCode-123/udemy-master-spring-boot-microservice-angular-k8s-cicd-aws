@@ -1,0 +1,13 @@
+server:
+  port: 9094
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: order
+
+app:
+  service:
+    url: "http://userservice/user/fetchUserById/"
+
