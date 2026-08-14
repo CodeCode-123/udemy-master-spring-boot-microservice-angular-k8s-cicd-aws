@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { API_URL_FC } from "../../constants/url";
+import { K8ExternalIp } from "../../constants/url";
 import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, throwError } from "rxjs";
 import { FoodCataloguePage } from "../../shared/model/foodcataloguepage";
@@ -10,8 +10,8 @@ import { FoodItemDTO } from "../../shared/model/fooditem";
     providedIn: 'root'
 })
 export class FoodItemService {
-    private apiUrl = API_URL_FC + '/foodCatalogue/fetchRestaurantAndFoodItemsById/';
-    private apiFoodsUrl = API_URL_FC + '/foodCatalogue/fetchFoodItemListByRestaurantId/';
+    private apiUrl = K8ExternalIp + '/foodCatalogue/fetchRestaurantAndFoodItemsById/';
+    private apiFoodsUrl = K8ExternalIp + '/foodCatalogue/fetchFoodItemListByRestaurantId/';
 
     constructor(private http: HttpClient) { }
     //private http = inject(HttpClient);
