@@ -1,8 +1,6 @@
 package com.codecode.restaurantlisting.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 public class RestaurantDTO {
@@ -14,9 +12,18 @@ public class RestaurantDTO {
     private String restaurantDescription;
 
     public RestaurantDTO() {
+
     }
 
     public RestaurantDTO(String name, String address, String city, String restaurantDescription) {
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.restaurantDescription = restaurantDescription;
+    }
+
+    public RestaurantDTO(int id, String name, String address, String city, String restaurantDescription) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.city = city;
