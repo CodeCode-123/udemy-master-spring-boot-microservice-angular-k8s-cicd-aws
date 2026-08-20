@@ -1269,7 +1269,7 @@ spec:
       - args:
         - --cluster-name=aws-eks-cluster
         - --ingress-class=alb
-        - --aws-vpc-id=vpc-0542a23da064658f7
+        - --aws-vpc-id=vpc-08938c6bf648ada72
         - --aws-region=us-east-1
         image: codecode123/aws-load-balancer-controller:v2.14.1
         livenessProbe:

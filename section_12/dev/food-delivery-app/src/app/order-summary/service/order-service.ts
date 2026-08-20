@@ -19,7 +19,7 @@ export class OrderService {
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'text/plain',
-            'Access-Control-Allow-Origin': 'http://k8s-default-awsingre-9aa4c55379-1908929512.us-east-1.elb.amazonaws.com' // Replace with your Angular app URL
+            'Access-Control-Allow-Origin': 'k8s-default-awsingre-9aa4c55379-2119480516.us-east-1.elb.amazonaws.com' // Replace with your Angular app URL
         })
     };
 
