@@ -9,17 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka" />
       </profile>
-      <profile name="Annotation profile for foodcatalogue" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-        </processorPath>
-        <module name="userinfo" />
-        <module name="foodcatalogue" />
-        <module name="order" />
-      </profile>
       <profile name="Annotation profile for restaurantlisting" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -29,6 +18,17 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
         <module name="restaurantlisting" />
+      </profile>
+      <profile name="Annotation profile for order" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="userinfo" />
+        <module name="order" />
+        <module name="foodcatalogue" />
       </profile>
     </annotationProcessing>
   </component>

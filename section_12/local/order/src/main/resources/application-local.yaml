@@ -12,3 +12,9 @@ spring:
       database: orderdb
       repositories:
         enabled: true
+
+#spring:
+#  mongodb:
+#    uri: mongodb+srv://admin:admin123456@atlas-cluster.9ghj1qt.mongodb.net/orderdb?retryWrites=true&w=majority
+#    host: atlas-cluster.9ghj1qt.mongodb.net
+#    database: orderdb
