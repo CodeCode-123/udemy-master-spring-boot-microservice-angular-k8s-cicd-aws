@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angularapp
+spec:
+  replicas: 1 # Adjust the number of replicas as per your requirements
+  selector:
+    matchLabels:
+      app: angularapp
+  template:
+    metadata:
+      labels:
+        app: angularapp
+    spec:
+      containers:
+        - name: angular-app-container
+          image: codecode123/food-delivery-app-fe:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+#      imagePullSecrets:
+#        - name: dockerhub-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-service
+spec:
+  type: ClusterIP
+  selector:
+    app: angularapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
