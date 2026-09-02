@@ -47,6 +47,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-kafka</artifactId>
 		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-common</artifactId>
+			<version>4.0.2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

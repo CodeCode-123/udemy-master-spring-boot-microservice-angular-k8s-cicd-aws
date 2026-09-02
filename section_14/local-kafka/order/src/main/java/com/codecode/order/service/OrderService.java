@@ -5,6 +5,7 @@ import com.codecode.order.dto.OrderDTOFromFE;
 import com.codecode.order.dto.UserDTO;
 import com.codecode.order.entity.Order;
 import com.codecode.order.repository.OrderRepo;
+import jakarta.ws.rs.NotFoundException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
@@ -17,6 +18,9 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -62,6 +66,25 @@ public class OrderService {
         RequestReplyFuture<String, String, String> sendAndReceive = replyingKafkaTemplate.sendAndReceive(record);
         ConsumerRecord<String, String> response = sendAndReceive.get();
         return objectMapper.readValue(response.value(), UserDTO.class);
+    }
+
+    public List<OrderDTO> getAllOrders() {
+        List<Order> orders = orderRepo.findAll();
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+        for (Order order: orders) {
+            OrderDTO temp = mapOrderToOrderDTO(order);
+            orderDTOs.add(temp);
+        }
+        return orderDTOs;
+    }
+
+    public OrderDTO getOrderByOrderId(Integer orderId) {
+        Optional<Order> orderOptional = orderRepo.findByOrderId(orderId);
+        if (orderOptional.isEmpty()) {
+            throw new NotFoundException("Order is not Found by orderId: " + orderId);
+        }
+        Order order = orderOptional.get();
+        return mapOrderToOrderDTO(order);
     }
 
     private OrderDTO mapOrderToOrderDTO(Order order) {

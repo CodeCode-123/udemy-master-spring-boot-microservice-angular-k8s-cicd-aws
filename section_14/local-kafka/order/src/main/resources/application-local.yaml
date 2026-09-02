@@ -12,6 +12,7 @@ spring:
       database: orderdb
       repositories:
         enabled: true
+      auto-index-creation: true
 
 #spring:
 #  mongodb:
