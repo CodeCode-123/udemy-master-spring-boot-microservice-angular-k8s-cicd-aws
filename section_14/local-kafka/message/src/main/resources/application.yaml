@@ -1,0 +1,8 @@
+server:
+  port: 9085
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: message

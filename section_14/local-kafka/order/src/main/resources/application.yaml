@@ -35,13 +35,20 @@ spring:
     consumer:
       group-id: userinfo-service-userdto
       auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer #org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer #org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
         spring:
           json:
             trusted:
               packages: "com.codecode.order.dto"
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
 
 app:
   service:
