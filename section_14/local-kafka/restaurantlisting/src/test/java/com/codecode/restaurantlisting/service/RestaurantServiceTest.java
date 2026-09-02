@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class RestaurantServiceTest {
-
     @Mock
     RestaurantRepo restaurantRepo;
 
@@ -110,4 +109,5 @@ public class RestaurantServiceTest {
 
         verify(restaurantRepo, times(1)).findById(mockRestaurantId);
     }
+
 }

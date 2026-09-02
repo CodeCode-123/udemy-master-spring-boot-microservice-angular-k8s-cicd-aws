@@ -43,6 +43,14 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -70,6 +78,7 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		 Source: https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin-->
 		<dependency>
 			<groupId>org.sonarsource.scanner.maven</groupId>
 			<artifactId>sonar-maven-plugin</artifactId>
@@ -89,6 +98,15 @@
 	</dependencyManagement>
 
 	<build>
+<!--		<pluginManagement>-->
+<!--			<plugins>-->
+<!--				<plugin>-->
+<!--					<groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--					<artifactId>sonar-maven-plugin</artifactId>-->
+<!--					<version>5.7.0.6970</version> &lt;!&ndash; Use the latest version available &ndash;&gt;-->
+<!--				</plugin>-->
+<!--			</plugins>-->
+<!--		</pluginManagement>-->
 		<plugins>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -112,6 +130,11 @@
 					</execution>
 				</executions>
 			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--				<artifactId>sonar-maven-plugin</artifactId>-->
+<!--				<version>5.7.0.6970</version> &lt;!&ndash; Use the latest version available &ndash;&gt;-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
