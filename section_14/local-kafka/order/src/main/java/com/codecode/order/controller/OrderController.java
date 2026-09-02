@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.ExecutionException;
+
 @RestController
 @RequestMapping("/order")
 @CrossOrigin
@@ -20,7 +22,7 @@ public class OrderController {
     }
 
     @PostMapping("/saveOrder")
-    public ResponseEntity<OrderDTO> saveOrder(@RequestBody OrderDTOFromFE orderDTOFromFE) {
+    public ResponseEntity<OrderDTO> saveOrder(@RequestBody OrderDTOFromFE orderDTOFromFE) throws ExecutionException, InterruptedException {
         OrderDTO orderSavedInDB = orderService.saveOrderInDb(orderDTOFromFE);
         return new ResponseEntity<>(orderSavedInDB, HttpStatus.OK);
     }

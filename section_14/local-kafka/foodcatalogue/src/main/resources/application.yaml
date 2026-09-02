@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
   kafka:
-    boostrap-servers: localhost:9092,localhost:9094
+    bootstrap-servers: localhost:9092,localhost:9094
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer

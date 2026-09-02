@@ -16,7 +16,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
   kafka:
-    boostrap-servers: localhost:9092,localhost:9094
+    bootstrap-servers: localhost:9092,localhost:9094
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -41,7 +41,7 @@ spring:
                     connection: 5
 
     consumer:
-      group-id: foodcatalogue-service-restaurantid
+      group-id: foodcatalogue-service-restaurantid-consumer
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
