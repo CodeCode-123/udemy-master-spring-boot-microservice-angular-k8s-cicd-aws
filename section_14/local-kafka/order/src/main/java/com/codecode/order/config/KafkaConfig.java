@@ -1,11 +1,14 @@
 package com.codecode.order.config;
 
 import com.codecode.order.dto.OrderDTO;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.aggregation.SelectionOperators;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.ContainerProperties;
@@ -13,6 +16,7 @@ import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 import tools.jackson.databind.deser.jdk.StringDeserializer;
 import tools.jackson.databind.ser.jdk.StringSerializer;
 
@@ -52,6 +56,15 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.max.in.flight.requests.per.connection}")
     private Integer inflightRequests;
 
+    @Value("${app.kafka.fetch-orderdto-topic}")
+    private String fetchOrderDTOTopic;
+
+    @Value("${spring.kafka.producer.transaction-id-prefix}")
+    private String transactionalIdPrefix;
+
+    @Value("${app.kafka.fetch-orderpaymentdto-topic}")
+    private String fetchOrderPaymentDTOTopic;
+
     //Kafka request-reply pattern
     @Bean
     public ConcurrentMessageListenerContainer<String, String> repliesContainer(
@@ -80,6 +93,8 @@ public class KafkaConfig {
         //default set is true, but explicitly set it will avoid disable it due to conflict configurations
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotence);
         config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, inflightRequests);
+        //define transactional id prefix
+        config.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionalIdPrefix);
 
         return config;
     }
@@ -92,5 +107,28 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<String, String>(producerFactory());
+    }
+
+    @Bean("kafkaTransactionManager")
+    public KafkaTransactionManager<String, String> kafkaTransactionManager(ProducerFactory<String, String> producerFactory) {
+        return new KafkaTransactionManager<>(producerFactory());
+    }
+
+    @Bean
+    public NewTopic createFetchOrderDTOTopic() {
+        return TopicBuilder
+                .name(fetchOrderDTOTopic)
+                .partitions(3)
+                .replicas(3)
+                .build();
+    }
+
+    @Bean
+    public NewTopic createFetchOrderPaymentDTOTopic() {
+        return TopicBuilder
+                .name(fetchOrderPaymentDTOTopic)
+                .partitions(3)
+                .replicas(3)
+                .build();
     }
 }

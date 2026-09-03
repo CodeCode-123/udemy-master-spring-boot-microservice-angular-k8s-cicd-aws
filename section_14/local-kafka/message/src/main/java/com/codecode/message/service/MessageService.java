@@ -1,6 +1,8 @@
 package com.codecode.message.service;
 
 import com.codecode.message.dto.OrderDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,6 +15,7 @@ import java.util.Map;
 public class MessageService {
     private final ObjectMapper objectMapper;
     private final CacheManager cacheManager;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
     public MessageService(ObjectMapper objectMapper, CacheManager cacheManager) {
         this.objectMapper = objectMapper;
@@ -22,6 +25,7 @@ public class MessageService {
     @KafkaListener(topics = "fetch-orderdto")
     //@Cacheable(value="orderdto", key="order")
     public OrderDTO getOrderDTO(String s) {
+        LOGGER.info("Received orderDTO: m{}", s);
         OrderDTO orderDTO = objectMapper.readValue(s, OrderDTO.class);
         Cache cache = cacheManager.getCache("orderdto");
         if (cache != null) {

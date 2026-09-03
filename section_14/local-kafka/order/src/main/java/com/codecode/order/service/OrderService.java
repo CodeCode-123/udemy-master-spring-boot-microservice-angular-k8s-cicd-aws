@@ -1,14 +1,16 @@
 package com.codecode.order.service;
 
-import com.codecode.order.dto.OrderDTO;
-import com.codecode.order.dto.OrderDTOFromFE;
-import com.codecode.order.dto.UserDTO;
+import com.codecode.order.dto.*;
 import com.codecode.order.entity.Order;
+import com.codecode.order.exception.MessageKafkaException;
+import com.codecode.order.exception.PaymentKafkaException;
 import com.codecode.order.repository.OrderRepo;
 import jakarta.ws.rs.NotFoundException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +18,15 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -32,6 +37,8 @@ public class OrderService {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
+
     @Value("${app.service.url}")
     private String url;
 
@@ -40,6 +47,12 @@ public class OrderService {
 
     @Value("${app.kafka.reply-topic}")
     private String replyTopic;
+
+    @Value("${app.kafka.fetch-orderdto-topic}")
+    private String fetchOrderDTOTopic;
+
+    @Value("${app.kafka.fetch-orderpaymentdto-topic}")
+    private String fetchOrderPaymentDTOTopic;
 
     @Autowired
     public OrderService(OrderRepo orderRepo, SequenceGenerator sequenceGenerator,
@@ -53,6 +66,8 @@ public class OrderService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    //don't rollback if it is the message service exception, rollback for all the other exceptions, include PaymentServiceException
+    @Transactional(value="kafkaTransactionManager", noRollbackFor = {MessageKafkaException.class})
     public OrderDTO saveOrderInDb(OrderDTOFromFE orderDTOFromFE) throws ExecutionException, InterruptedException {
         Integer newOrderID = sequenceGenerator.generateNextOrderId();
         UserDTO userDTO = fetchUserDetailsFromUserId(orderDTOFromFE.getUserId());
@@ -61,7 +76,22 @@ public class OrderService {
         orderRepo.save(orderToBeSaved);
         OrderDTO orderDTO = mapOrderToOrderDTO(orderToBeSaved);
         //send to kafka broker
-        kafkaTemplate.send("fetch-orderdto", String.valueOf(orderDTO.getOrderId()), objectMapper.writeValueAsString(orderDTO));
+        CompletableFuture<SendResult<String, String>> messageFuture = kafkaTemplate.send(fetchOrderDTOTopic,
+                String.valueOf(orderDTO.getOrderId()), objectMapper.writeValueAsString(orderDTO));
+        messageFuture.exceptionally(ex -> {
+            throw new MessageKafkaException("Failed to send to Message Service: " + ex.getMessage());
+        });
+
+        //calculate the total amount and create an orderPaymentDTO
+        double amount = calculateTotalAmount(orderDTO);
+        OrderPaymentDTO orderPaymentDTO = new OrderPaymentDTO(String.valueOf(orderDTO.getOrderId()), amount);
+        //send to kafka broker
+        CompletableFuture<SendResult<String, String>> paymentFuture = kafkaTemplate.send(fetchOrderPaymentDTOTopic,
+                String.valueOf(orderPaymentDTO.getOrderId()), objectMapper.writeValueAsString(orderPaymentDTO));
+        paymentFuture.exceptionally(ex -> {
+            throw new PaymentKafkaException("Failed to send to Payment Service: " + ex.getMessage());
+        });
+
         return orderDTO;
     }
 
@@ -104,5 +134,16 @@ public class OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderDTO, order);
         return order;
+    }
+
+    private double calculateTotalAmount(OrderDTO orderDTO) {
+        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
+        double sum = 0;
+        for (FoodItemDTO foodItemDTO: foodItemDTOList) {
+            double price = foodItemDTO.getPrice();
+            int quantity = foodItemDTO.getQuantity();
+            sum += price * quantity;
+        }
+        return sum;
     }
 }
