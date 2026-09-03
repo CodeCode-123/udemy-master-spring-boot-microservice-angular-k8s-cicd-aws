@@ -12,6 +12,7 @@ import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -29,6 +30,7 @@ public class OrderService {
     private final SequenceGenerator sequenceGenerator;
     private final ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
     private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Value("${app.service.url}")
     private String url;
@@ -42,11 +44,13 @@ public class OrderService {
     @Autowired
     public OrderService(OrderRepo orderRepo, SequenceGenerator sequenceGenerator,
                         ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate,
-                        ObjectMapper objectMapper) {
+                        ObjectMapper objectMapper,
+                        KafkaTemplate<String, String> kafkaTemplate) {
         this.orderRepo = orderRepo;
         this.sequenceGenerator = sequenceGenerator;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
         this.objectMapper = objectMapper;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public OrderDTO saveOrderInDb(OrderDTOFromFE orderDTOFromFE) throws ExecutionException, InterruptedException {
@@ -55,7 +59,10 @@ public class OrderService {
         Order orderToBeSaved = new Order(newOrderID, orderDTOFromFE.getFoodItemsList(),
                 orderDTOFromFE.getRestaurantDTO(), userDTO);
         orderRepo.save(orderToBeSaved);
-        return mapOrderToOrderDTO(orderToBeSaved);
+        OrderDTO orderDTO = mapOrderToOrderDTO(orderToBeSaved);
+        //send to kafka broker
+        kafkaTemplate.send("fetch-orderdto", String.valueOf(orderDTO.getOrderId()), objectMapper.writeValueAsString(orderDTO));
+        return orderDTO;
     }
 
     //Kafka request-reply pattern

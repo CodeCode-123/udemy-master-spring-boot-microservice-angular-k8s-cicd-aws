@@ -32,12 +32,12 @@ spring:
             ms: 30000
         enable:
           idempotence: true
-          max:
-            in:
-              flight:
-                requests:
-                  per:
-                    connection: 5
+        max:
+          in:
+            flight:
+              requests:
+                per:
+                  connection: 5
 
     consumer:
       group-id: restaurantlisting-service-restaurantdto

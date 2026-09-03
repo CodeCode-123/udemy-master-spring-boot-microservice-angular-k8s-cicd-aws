@@ -75,6 +75,8 @@ public class UserService {
         userDTO.setUserId(user.getUserId());
         userDTO.setUserName(user.getUserName());
         userDTO.setUserPassword(user.getUserPassword());
+        userDTO.setCity(user.getCity());
+        userDTO.setAddress(user.getAddress());
         return userDTO;
     }
 

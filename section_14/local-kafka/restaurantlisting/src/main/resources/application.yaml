@@ -33,12 +33,12 @@ spring:
             ms: 30000
         enable:
           idempotence: true
-          max:
-            in:
-              flight:
-                requests:
-                  per:
-                    connection: 5
+        max:
+          in:
+            flight:
+              requests:
+                per:
+                  connection: 5
 
     consumer:
       # 1. Set the top-level deserializers to the ErrorHandlingDeserializer wrapper
