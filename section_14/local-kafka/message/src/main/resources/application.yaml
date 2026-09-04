@@ -26,3 +26,4 @@ spring:
             value:
               delegate:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
+      isolation-level: READ_COMMITTED

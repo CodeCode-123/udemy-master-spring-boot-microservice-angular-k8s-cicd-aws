@@ -75,12 +75,6 @@ public class OrderService {
                 orderDTOFromFE.getRestaurantDTO(), userDTO);
         orderRepo.save(orderToBeSaved);
         OrderDTO orderDTO = mapOrderToOrderDTO(orderToBeSaved);
-        //send to kafka broker
-        CompletableFuture<SendResult<String, String>> messageFuture = kafkaTemplate.send(fetchOrderDTOTopic,
-                String.valueOf(orderDTO.getOrderId()), objectMapper.writeValueAsString(orderDTO));
-        messageFuture.exceptionally(ex -> {
-            throw new MessageKafkaException("Failed to send to Message Service: " + ex.getMessage());
-        });
 
         //calculate the total amount and create an orderPaymentDTO
         double amount = calculateTotalAmount(orderDTO);
@@ -91,6 +85,20 @@ public class OrderService {
         paymentFuture.exceptionally(ex -> {
             throw new PaymentKafkaException("Failed to send to Payment Service: " + ex.getMessage());
         });
+
+        // Added method to test @Transactional
+        //throwPaymentException();
+        //throwMessageException();
+
+        //send to kafka broker
+        CompletableFuture<SendResult<String, String>> messageFuture = kafkaTemplate.send(fetchOrderDTOTopic,
+                String.valueOf(orderDTO.getOrderId()), objectMapper.writeValueAsString(orderDTO));
+        messageFuture.exceptionally(ex -> {
+            throw new MessageKafkaException("Failed to send to Message Service: " + ex.getMessage());
+        });
+
+        // Added method to test @Transactional
+        //throwMessageException();
 
         return orderDTO;
     }
@@ -145,5 +153,13 @@ public class OrderService {
             sum += price * quantity;
         }
         return sum;
+    }
+
+    private void throwPaymentException() throws PaymentKafkaException {
+        throw new PaymentKafkaException("Failed to send Payment");
+    }
+
+    private void throwMessageException() throws MessageKafkaException {
+        throw new MessageKafkaException("Failed to send Message");
     }
 }
