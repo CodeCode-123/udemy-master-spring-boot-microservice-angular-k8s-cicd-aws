@@ -1,0 +1,80 @@
+server:
+  port: 9084
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: order
+
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9094
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      acks: all
+      properties:
+        delivery:
+          timeout:
+            ms: 120000
+        linger:
+          ms: 0
+        request:
+          timeout:
+            ms: 30000
+        enable:
+          idempotence: true
+        max:
+          in:
+            flight:
+              requests:
+                per:
+                  connection: 5
+#      transaction-id-prefix: order-service-${random.value}-
+
+    consumer:
+      group-id: order-ms
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer #org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer #org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "com.codecode.order.dto,com.codecode.core.*"
+#          jackson:
+#            deserialization:
+#              fail-on-null-for-primitives: false
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+
+app:
+  service:
+    url: "http://userservice/user/fetchUserById/"
+  kafka:
+    request-topic: "fetch-user-request"
+    reply-topic: "fetch-user-reply"
+    #fetch-orderdto-topic: "fetch-orderdto"
+    #fetch-orderpaymentdto-topic: "fetch-orderpaymentdto"
+    order-event-topic: "order-event"
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        kafka:
+#          transaction: DEBUG
+#        transaction: DEBUG
+#  cors:
+#    allowed-origins: "http://localhost:4200"
+#    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+#    allowed-headers: "*"
+#    allow-credentials: true
+
