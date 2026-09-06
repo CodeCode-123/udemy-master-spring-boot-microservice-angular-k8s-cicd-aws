@@ -20,11 +20,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepo userRepo;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserService(UserRepo userRepo, KafkaTemplate<String, Object> kafkaTemplate, ObjectMapper objectMapper) {
+    public UserService(UserRepo userRepo, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         this.userRepo = userRepo;
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;

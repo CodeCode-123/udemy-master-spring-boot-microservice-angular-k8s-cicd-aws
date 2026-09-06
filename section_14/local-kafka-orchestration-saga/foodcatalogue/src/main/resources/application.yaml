@@ -48,7 +48,7 @@ spring:
         spring:
           json:
             trusted:
-              packages: "com.codecode.foodcatalogue.dto,com.codecode.core.*"
+              packages: "com.codecode.core.*"
           deserializer:
             key:
               delegate:
@@ -60,8 +60,5 @@ spring:
 app:
   service:
     url: http://restaurantlisting/restaurant/fetchById/
-#  cors:
-#    allowed-origins: "http://localhost:4200"
-#    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
-#    allowed-headers: "*"
-#    allow-credentials: true
+  kafka:
+    food-command-topic: "food-command"

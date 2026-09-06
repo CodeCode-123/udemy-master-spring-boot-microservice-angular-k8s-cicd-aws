@@ -7,8 +7,6 @@ import com.codecode.core.dto.event.OrderCreatedEvent;
 import com.codecode.core.types.OrderStatus;
 import com.codecode.order.dto.*;
 import com.codecode.order.entity.Order;
-import com.codecode.order.exception.MessageKafkaException;
-import com.codecode.order.exception.PaymentKafkaException;
 import com.codecode.order.repository.OrderRepo;
 import jakarta.ws.rs.NotFoundException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -53,11 +51,7 @@ public class OrderService {
     @Value("${app.kafka.reply-topic}")
     private String replyTopic;
 
-//    @Value("${app.kafka.fetch-orderdto-topic}")
-//    private String fetchOrderDTOTopic;
-//
-//    @Value("${app.kafka.fetch-orderpaymentdto-topic}")
-//    private String fetchOrderPaymentDTOTopic;
+
 
     @Autowired
     public OrderService(OrderRepo orderRepo, SequenceGenerator sequenceGenerator,
@@ -140,22 +134,22 @@ public class OrderService {
         return order;
     }
 
-    private double calculateTotalAmount(OrderDTO orderDTO) {
-        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
-        double sum = 0;
-        for (FoodItemDTO foodItemDTO: foodItemDTOList) {
-            double price = foodItemDTO.getPrice();
-            int quantity = foodItemDTO.getQuantity();
-            sum += price * quantity;
-        }
-        return sum;
-    }
-
-    private void throwPaymentException() throws PaymentKafkaException {
-        throw new PaymentKafkaException("Failed to send Payment");
-    }
-
-    private void throwMessageException() throws MessageKafkaException {
-        throw new MessageKafkaException("Failed to send Message");
-    }
+//    private double calculateTotalAmount(OrderDTO orderDTO) {
+//        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
+//        double sum = 0;
+//        for (FoodItemDTO foodItemDTO: foodItemDTOList) {
+//            double price = foodItemDTO.getPrice();
+//            int quantity = foodItemDTO.getQuantity();
+//            sum += price * quantity;
+//        }
+//        return sum;
+//    }
+//
+//    private void throwPaymentException() throws PaymentKafkaException {
+//        throw new PaymentKafkaException("Failed to send Payment");
+//    }
+//
+//    private void throwMessageException() throws MessageKafkaException {
+//        throw new MessageKafkaException("Failed to send Message");
+//    }
 }

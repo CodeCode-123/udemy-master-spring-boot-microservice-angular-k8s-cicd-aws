@@ -48,17 +48,11 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.max.in.flight.requests.per.connection}")
     private Integer inflightRequests;
 
-//    @Value("${app.kafka.fetch-orderdto-topic}")
-//    private String fetchOrderDTOTopic;
-
-//    @Value("${spring.kafka.producer.transaction-id-prefix}")
-//    private String transactionalIdPrefix;
-
-//    @Value("${app.kafka.fetch-orderpaymentdto-topic}")
-//    private String fetchOrderPaymentDTOTopic;
-
     @Value("${app.kafka.order-event-topic}")
     private String orderEventTopic;
+
+    @Value("${app.kafka.food-command-topic}")
+    private String foodCommandTopic;
 
     private final static Integer TOPIC_REPLICATION_FACTOR=3;
     private final static Integer TOPIC_PARTITIONS=3;
@@ -80,7 +74,6 @@ public class KafkaConfig {
 
     Map<String, Object> producerConfigs() {
         Map<String, Object> config = new HashMap<>();
-
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
@@ -91,8 +84,6 @@ public class KafkaConfig {
         //default set is true, but explicitly set it will avoid disable it due to conflict configurations
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotence);
         config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, inflightRequests);
-        //define transactional id prefix
-        //config.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionalIdPrefix);
 
         return config;
     }
@@ -107,33 +98,19 @@ public class KafkaConfig {
         return new KafkaTemplate<String, String>(producerFactory());
     }
 
-//    @Bean("kafkaTransactionManager")
-//    public KafkaTransactionManager<String, String> kafkaTransactionManager(ProducerFactory<String, String> producerFactory) {
-//        return new KafkaTransactionManager<>(producerFactory());
-//    }
-
-//    @Bean
-//    public NewTopic createFetchOrderDTOTopic() {
-//        return TopicBuilder
-//                .name(fetchOrderDTOTopic)
-//                .partitions(3)
-//                .replicas(3)
-//                .build();
-//    }
-//
-//    @Bean
-//    public NewTopic createFetchOrderPaymentDTOTopic() {
-//        return TopicBuilder
-//                .name(fetchOrderPaymentDTOTopic)
-//                .partitions(3)
-//                .replicas(3)
-//                .build();
-//    }
-
     @Bean
     public NewTopic createOrderEventTopic() {
         return TopicBuilder
                 .name(orderEventTopic)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
+    }
+
+    @Bean
+    public NewTopic createFoodCommandTopic() {
+        return TopicBuilder
+                .name(foodCommandTopic)
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();

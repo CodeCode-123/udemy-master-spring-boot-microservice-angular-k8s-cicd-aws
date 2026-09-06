@@ -31,7 +31,6 @@ spring:
               requests:
                 per:
                   connection: 5
-#      transaction-id-prefix: order-service-${random.value}-
 
     consumer:
       group-id: order-ms
@@ -43,9 +42,6 @@ spring:
           json:
             trusted:
               packages: "com.codecode.order.dto,com.codecode.core.*"
-#          jackson:
-#            deserialization:
-#              fail-on-null-for-primitives: false
           deserializer:
             key:
               delegate:
@@ -54,27 +50,12 @@ spring:
               delegate:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
 
-
 app:
   service:
     url: "http://userservice/user/fetchUserById/"
   kafka:
     request-topic: "fetch-user-request"
     reply-topic: "fetch-user-reply"
-    #fetch-orderdto-topic: "fetch-orderdto"
-    #fetch-orderpaymentdto-topic: "fetch-orderpaymentdto"
     order-event-topic: "order-event"
-
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        kafka:
-#          transaction: DEBUG
-#        transaction: DEBUG
-#  cors:
-#    allowed-origins: "http://localhost:4200"
-#    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
-#    allowed-headers: "*"
-#    allow-credentials: true
+    food-command-topic: "food-command"
 

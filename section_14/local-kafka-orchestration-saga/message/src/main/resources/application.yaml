@@ -18,7 +18,7 @@ spring:
         spring:
           json:
             trusted:
-              packages: "com.codecode.message.dto,com.codecode.core.*"
+              packages: "com.codecode.core.*"
           deserializer:
             key:
               delegate:
@@ -26,4 +26,3 @@ spring:
             value:
               delegate:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
-#      isolation-level: READ_COMMITTED

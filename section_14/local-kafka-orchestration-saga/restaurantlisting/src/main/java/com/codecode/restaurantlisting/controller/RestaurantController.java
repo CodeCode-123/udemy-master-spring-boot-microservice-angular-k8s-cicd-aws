@@ -1,6 +1,6 @@
 package com.codecode.restaurantlisting.controller;
 
-import com.codecode.restaurantlisting.dto.RestaurantDTO;
+import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.restaurantlisting.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

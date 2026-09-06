@@ -1,6 +1,6 @@
 package com.codecode.restaurantlisting.service;
 
-import com.codecode.restaurantlisting.dto.RestaurantDTO;
+import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.restaurantlisting.entity.Restaurant;
 import com.codecode.restaurantlisting.mapper.RestaurantMapper;
 import com.codecode.restaurantlisting.repository.RestaurantRepo;
@@ -14,7 +14,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +21,11 @@ import java.util.Optional;
 @Service
 public class RestaurantService {
     private final RestaurantRepo restaurantRepo;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public RestaurantService(RestaurantRepo restaurantRepo, KafkaTemplate<String, Object> kafkaTemplate, ObjectMapper objectMapper) {
+    public RestaurantService(RestaurantRepo restaurantRepo, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         this.restaurantRepo = restaurantRepo;
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;
@@ -41,7 +40,7 @@ public class RestaurantService {
     }
 
     @KafkaListener(topics = "fetch-restaurant-request")
-    @SendTo("fetch-restaurant-reply")
+    @SendTo
     public String handleRequest(Integer restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepo.findById(restaurantId);
         if (restaurantOptional.isEmpty()) {

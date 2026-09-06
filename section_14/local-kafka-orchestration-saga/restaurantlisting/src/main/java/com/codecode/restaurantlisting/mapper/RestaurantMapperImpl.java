@@ -1,6 +1,6 @@
 package com.codecode.restaurantlisting.mapper;
 
-import com.codecode.restaurantlisting.dto.RestaurantDTO;
+import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.restaurantlisting.entity.Restaurant;
 import org.springframework.beans.BeanUtils;
 

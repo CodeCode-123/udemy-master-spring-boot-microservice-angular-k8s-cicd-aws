@@ -31,13 +31,9 @@ public class KafkaConfig {
     @Value("${spring.kafka.consumer.properties.spring.json.trusted.packages}")
     private String trustedPackages;
 
-//    @Value("${spring.kafka.consumer.isolation-level}")
-//    private String isolationLevel;
-
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
-
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
@@ -45,7 +41,6 @@ public class KafkaConfig {
         config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JacksonJsonDeserializer.class);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
         config.put(JacksonJsonDeserializer.TRUSTED_PACKAGES, trustedPackages);
-        //config.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, isolationLevel.toLowerCase());
 
         return new DefaultKafkaConsumerFactory<>(config);
     }

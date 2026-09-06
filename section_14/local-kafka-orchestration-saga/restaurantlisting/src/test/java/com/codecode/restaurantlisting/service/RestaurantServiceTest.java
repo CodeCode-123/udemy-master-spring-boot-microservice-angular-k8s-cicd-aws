@@ -1,6 +1,6 @@
 package com.codecode.restaurantlisting.service;
 
-import com.codecode.restaurantlisting.dto.RestaurantDTO;
+import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.restaurantlisting.entity.Restaurant;
 import com.codecode.restaurantlisting.mapper.RestaurantMapper;
 import com.codecode.restaurantlisting.repository.RestaurantRepo;
@@ -9,8 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +30,9 @@ public class RestaurantServiceTest {
 
     @InjectMocks
     RestaurantService restaurantService;
+
+    @Spy
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
@@ -47,7 +54,7 @@ public class RestaurantServiceTest {
         assertEquals(mockRestaurants.size(), restaurantDTOList.size());
         for (int i = 0; i < mockRestaurants.size(); i++) {
             RestaurantDTO tempDTO = RestaurantMapper.INSTANCE.mapRestaurantToRestaurantDTO(mockRestaurants.get(i));
-            assertEquals(tempDTO, restaurantDTOList.get(i));
+            assertEquals(objectMapper.writeValueAsString(tempDTO), objectMapper.writeValueAsString(restaurantDTOList.get(i)));
         }
 
         //Verify that the repository method was called
@@ -61,7 +68,7 @@ public class RestaurantServiceTest {
         Restaurant mockRestaurantEnter = RestaurantMapper.INSTANCE.mapRestaurantDTOToRestaurant(mockRestaurantDTOEnter);
         when(restaurantRepo.save(mockRestaurantEnter)).thenReturn(mockRestaurantEnter);
         RestaurantDTO savedRestaurantDTOEnter = restaurantService.addRestaurantInDB(mockRestaurantDTOEnter);
-        assertEquals(mockRestaurantDTOEnter, savedRestaurantDTOEnter);
+        assertEquals(objectMapper.writeValueAsString(mockRestaurantDTOEnter), objectMapper.writeValueAsString(savedRestaurantDTOEnter));
         verify(restaurantRepo, times(1)).save(mockRestaurantEnter);
 
         //Create a mock restaurant to be saved
@@ -69,12 +76,12 @@ public class RestaurantServiceTest {
         Restaurant mockRestaurant = RestaurantMapper.INSTANCE.mapRestaurantDTOToRestaurant(mockRestaurantDTO);
         when(restaurantRepo.save(mockRestaurant)).thenReturn(mockRestaurant);
         RestaurantDTO savedRestaurantDTO = restaurantService.addRestaurantInDB(mockRestaurantDTO);
-        assertEquals(mockRestaurantDTO, savedRestaurantDTO);
+        assertEquals(objectMapper.writeValueAsString(mockRestaurantDTO), objectMapper.writeValueAsString(savedRestaurantDTO));
         verify(restaurantRepo, times(1)).save(mockRestaurant);
 
         Restaurant restaurant = new Restaurant("Restaurant 1", "Address 1", "city 1", "Desc 1");
         restaurant.setId(1);
-        assertEquals(restaurant, mockRestaurant);
+        assertEquals(restaurant.toString(), mockRestaurant.toString());
     }
 
     @Test

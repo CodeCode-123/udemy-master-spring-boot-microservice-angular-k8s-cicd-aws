@@ -21,5 +21,5 @@ public class OrderHistory {
     @Indexed
     private Integer orderId;
     private OrderStatus orderStatus;
-    private Timestamp timestamp;
+    private Timestamp createdAt;
 }
