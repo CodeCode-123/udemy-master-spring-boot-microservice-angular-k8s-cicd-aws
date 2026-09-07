@@ -31,8 +31,7 @@ public class FoodCatalogueServiceImpl implements FoodCatalogueService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final FoodItemRepo foodItemRepo;
-    private final ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate;
 
     @Value("${app.service.url}")
     private String url;
@@ -40,11 +39,9 @@ public class FoodCatalogueServiceImpl implements FoodCatalogueService {
 
     @Autowired
     public FoodCatalogueServiceImpl(FoodItemRepo foodItemRepo,
-                                    ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate,
-                                    ObjectMapper objectMapper) {
+                                    ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate) {
         this.foodItemRepo = foodItemRepo;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
-        this.objectMapper = objectMapper;
     }
 
     private FoodItem mapFoodItemDTOToFoodItem(FoodItemDTO foodItemDTO) {
@@ -84,12 +81,12 @@ public class FoodCatalogueServiceImpl implements FoodCatalogueService {
 
     //Kafka request-reply pattern
     public RestaurantDTO getDataById(Integer restaurantId) throws ExecutionException, InterruptedException {
-        ProducerRecord<String, String> record = new ProducerRecord<>("fetch-restaurant-request", String.valueOf(restaurantId));
+        ProducerRecord<String, Object> record = new ProducerRecord<>("fetch-restaurant-request", restaurantId);
         //Set reply topic header
         record.headers().add(new RecordHeader(KafkaHeaders.REPLY_TOPIC, "fetch-restaurant-reply".getBytes()));
-        RequestReplyFuture<String, String, String> sendAndReceive = replyingKafkaTemplate.sendAndReceive(record);
-        ConsumerRecord<String, String> response = sendAndReceive.get();
-        return objectMapper.readValue(response.value(), RestaurantDTO.class);
+        RequestReplyFuture<String, Object, Object> sendAndReceive = replyingKafkaTemplate.sendAndReceive(record);
+        ConsumerRecord<String, Object> response = sendAndReceive.get();
+        return (RestaurantDTO) response.value();
     }
 
     public List<FoodItemDTO> fetchFoodItemList(Integer restaurantId) {

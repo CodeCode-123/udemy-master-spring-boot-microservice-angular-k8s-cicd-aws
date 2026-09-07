@@ -22,24 +22,21 @@ public class OrderSaga {
     @Value("${app.kafka.food-command-topic}")
     private String foodCommandTopic;
 
-    private final ObjectMapper objectMapper;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final OrderHistoryService orderHistoryService;
 
-    public OrderSaga(ObjectMapper objectMapper, KafkaTemplate<String, String> kafkaTemplate,
+    public OrderSaga(KafkaTemplate<String, Object> kafkaTemplate,
                      OrderHistoryService orderHistoryService) {
-        this.objectMapper = objectMapper;
         this.kafkaTemplate = kafkaTemplate;
         this.orderHistoryService = orderHistoryService;
     }
 
     @KafkaListener(topics = "order-event", groupId = "order-ms")
-    public void getOrderCreatedEvent(String s) {
-        LOGGER.info("Order Created Event: " + s);
-        OrderCreatedEvent event = objectMapper.readValue(s, OrderCreatedEvent.class);
-        ReserveFoodCommand reserveFoodCommand = new ReserveFoodCommand(event.getOrderId(),
-                event.getFoodItemsList());
-        kafkaTemplate.send(foodCommandTopic, objectMapper.writeValueAsString(reserveFoodCommand));
-        orderHistoryService.saveOrderHistoryInDb(event);
+    public void getOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
+        LOGGER.info("Order Created Event: orderId: {}, orderCreatedEvent: {}", orderCreatedEvent.getOrderId(), orderCreatedEvent.toString());
+        ReserveFoodCommand reserveFoodCommand = new ReserveFoodCommand(orderCreatedEvent.getOrderId(),
+                orderCreatedEvent.getFoodItemsList());
+        kafkaTemplate.send(foodCommandTopic, reserveFoodCommand);
+        orderHistoryService.saveOrderHistoryInDb(orderCreatedEvent);
     }
 }

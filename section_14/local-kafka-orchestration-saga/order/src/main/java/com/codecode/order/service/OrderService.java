@@ -1,6 +1,5 @@
 package com.codecode.order.service;
 
-import com.codecode.core.dto.FoodItemDTO;
 import com.codecode.core.dto.OrderDTO;
 import com.codecode.core.dto.UserDTO;
 import com.codecode.core.dto.event.OrderCreatedEvent;
@@ -23,7 +22,6 @@ import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +33,8 @@ import java.util.concurrent.ExecutionException;
 public class OrderService {
     private final OrderRepo orderRepo;
     private final SequenceGenerator sequenceGenerator;
-    private final ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
-    private final ObjectMapper objectMapper;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String orderEventTopic;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
@@ -51,17 +48,13 @@ public class OrderService {
     @Value("${app.kafka.reply-topic}")
     private String replyTopic;
 
-
-
     @Autowired
     public OrderService(OrderRepo orderRepo, SequenceGenerator sequenceGenerator,
-                        ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate,
-                        ObjectMapper objectMapper, KafkaTemplate<String, String> kafkaTemplate,
+                        ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate, KafkaTemplate<String, Object> kafkaTemplate,
                         @Value("${app.kafka.order-event-topic}") String orderEventTopic) {
         this.orderRepo = orderRepo;
         this.sequenceGenerator = sequenceGenerator;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
-        this.objectMapper = objectMapper;
         this.kafkaTemplate = kafkaTemplate;
         this.orderEventTopic = orderEventTopic;
     }
@@ -82,8 +75,8 @@ public class OrderService {
         );
 
         //send the orderCreatedEvent to the Kafka broker
-        CompletableFuture<SendResult<String, String>> orderCreatedFuture = kafkaTemplate.send(
-                orderEventTopic, String.valueOf(placedOrder.getOrderId()), objectMapper.writeValueAsString(placedOrder));
+        CompletableFuture<SendResult<String, Object>> orderCreatedFuture = kafkaTemplate.send(
+                orderEventTopic, String.valueOf(placedOrder.getOrderId()), placedOrder);
 
         return new OrderDTO(
                 entity.getOrderId(),
@@ -95,12 +88,12 @@ public class OrderService {
 
     //Kafka request-reply pattern
     private UserDTO fetchUserDetailsFromUserId(Integer userId) throws ExecutionException, InterruptedException {
-        ProducerRecord<String, String> record = new ProducerRecord<>(requestTopic, String.valueOf(userId));
+        ProducerRecord<String, Object> record = new ProducerRecord<>(requestTopic, userId);
         //Set reply topic header
         record.headers().add(new RecordHeader(KafkaHeaders.REPLY_TOPIC, replyTopic.getBytes()));
-        RequestReplyFuture<String, String, String> sendAndReceive = replyingKafkaTemplate.sendAndReceive(record);
-        ConsumerRecord<String, String> response = sendAndReceive.get();
-        return objectMapper.readValue(response.value(), UserDTO.class);
+        RequestReplyFuture<String, Object, Object> sendAndReceive = replyingKafkaTemplate.sendAndReceive(record);
+        ConsumerRecord<String, Object> response = sendAndReceive.get();
+        return (UserDTO) response.value();
     }
 
     public List<OrderDTO> getAllOrders() {

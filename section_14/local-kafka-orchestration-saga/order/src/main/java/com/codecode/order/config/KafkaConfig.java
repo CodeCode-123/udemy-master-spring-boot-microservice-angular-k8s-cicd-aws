@@ -59,16 +59,16 @@ public class KafkaConfig {
 
     //Kafka request-reply pattern
     @Bean
-    public ConcurrentMessageListenerContainer<String, String> repliesContainer(
-            ConsumerFactory<String, String> consumerFactory) {
+    public ConcurrentMessageListenerContainer<String, Object> repliesContainer(
+            ConsumerFactory<String, Object> consumerFactory) {
         ContainerProperties containerProperties = new ContainerProperties(replyTopic);
         return new ConcurrentMessageListenerContainer<>(consumerFactory, containerProperties);
     }
 
     @Bean
-    public ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate(
-            ProducerFactory<String, String> producerFactory,
-            ConcurrentMessageListenerContainer<String, String> repliesContainer) {
+    public ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate(
+            ProducerFactory<String, Object> producerFactory,
+            ConcurrentMessageListenerContainer<String, Object> repliesContainer) {
         return new ReplyingKafkaTemplate<>(producerFactory, repliesContainer);
     }
 
@@ -89,13 +89,13 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Object> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<String, String>(producerFactory());
+    public KafkaTemplate<String, Object> kafkaTemplate() {
+        return new KafkaTemplate<String, Object>(producerFactory());
     }
 
     @Bean

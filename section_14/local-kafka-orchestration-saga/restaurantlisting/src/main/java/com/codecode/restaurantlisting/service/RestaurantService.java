@@ -41,14 +41,13 @@ public class RestaurantService {
 
     @KafkaListener(topics = "fetch-restaurant-request")
     @SendTo
-    public String handleRequest(Integer restaurantId) {
+    public RestaurantDTO handleRequest(Integer restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepo.findById(restaurantId);
         if (restaurantOptional.isEmpty()) {
             throw new NotFoundException("RestaurantDTO is not Found by restaurantId: " + restaurantId);
         }
         Restaurant restaurant = restaurantOptional.get();
-        RestaurantDTO restaurantDTO = convertToRestaurantDTO(restaurant);
-        return objectMapper.writeValueAsString(restaurantDTO);
+        return convertToRestaurantDTO(restaurant);
     }
 
     public RestaurantDTO addRestaurantInDB(RestaurantDTO restaurantDTO) {

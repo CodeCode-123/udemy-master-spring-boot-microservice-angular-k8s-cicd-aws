@@ -20,11 +20,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepo userRepo;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserService(UserRepo userRepo, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
+    public UserService(UserRepo userRepo, KafkaTemplate<String, Object> kafkaTemplate, ObjectMapper objectMapper) {
         this.userRepo = userRepo;
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;
@@ -59,14 +59,13 @@ public class UserService {
 
     @KafkaListener(topics = "fetch-user-request")
     @SendTo
-    public String handleRequest(Integer userId) {
+    public UserDTO handleRequest(Integer userId) {
         Optional<User> userOptional = userRepo.findById(userId);
         if (userOptional.isEmpty()) {
             throw new NotFoundException("User is not Found by userId: " + userId);
         }
         User user = userOptional.get();
-        UserDTO userDTO = convertToUserDTO(user);
-        return objectMapper.writeValueAsString(userDTO);
+        return convertToUserDTO(user);
     }
 
     private UserDTO convertToUserDTO(User user) {

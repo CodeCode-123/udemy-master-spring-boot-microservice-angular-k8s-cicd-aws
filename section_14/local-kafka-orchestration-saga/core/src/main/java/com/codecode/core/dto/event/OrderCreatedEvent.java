@@ -3,10 +3,7 @@ package com.codecode.core.dto.event;
 import com.codecode.core.dto.FoodItemDTO;
 import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.core.dto.UserDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class OrderCreatedEvent {
     private Integer orderId;
     private List<FoodItemDTO> foodItemsList;

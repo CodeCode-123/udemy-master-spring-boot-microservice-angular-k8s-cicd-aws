@@ -12,12 +12,12 @@ import java.util.Map;
 
 @Service
 public class MessageService {
-    private final ObjectMapper objectMapper;
+//    private final ObjectMapper objectMapper;
     private final CacheManager cacheManager;
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
-    public MessageService(ObjectMapper objectMapper, CacheManager cacheManager) {
-        this.objectMapper = objectMapper;
+    public MessageService(CacheManager cacheManager) {
+//        this.objectMapper = objectMapper;
         this.cacheManager = cacheManager;
     }
 

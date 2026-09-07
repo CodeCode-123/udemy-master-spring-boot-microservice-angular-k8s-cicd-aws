@@ -24,16 +24,16 @@ public class KafkaConfig {
 
     //Kakfa request-reply pattern
     @Bean
-    public ConcurrentMessageListenerContainer<String, String> repliesContainer(
-            ConsumerFactory<String, String> consumerFactory) {
+    public ConcurrentMessageListenerContainer<String, Object> repliesContainer(
+            ConsumerFactory<String, Object> consumerFactory) {
         ContainerProperties containerProperties = new ContainerProperties("fetch-restaurant-reply");
         return new ConcurrentMessageListenerContainer<>(consumerFactory, containerProperties);
     }
 
     @Bean
-    public ReplyingKafkaTemplate<String, String, String> replyingTemplate(
-            ProducerFactory<String, String> producerFactory,
-            ConcurrentMessageListenerContainer<String, String> repliesContainer) {
+    public ReplyingKafkaTemplate<String, Object, Object> replyingTemplate(
+            ProducerFactory<String, Object> producerFactory,
+            ConcurrentMessageListenerContainer<String, Object> repliesContainer) {
         return new ReplyingKafkaTemplate<>(producerFactory, repliesContainer);
     }
 

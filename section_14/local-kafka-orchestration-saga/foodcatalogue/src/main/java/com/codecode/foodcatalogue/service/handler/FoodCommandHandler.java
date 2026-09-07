@@ -13,15 +13,8 @@ import tools.jackson.databind.ObjectMapper;
 public class FoodCommandHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FoodCommandHandler.class);
 
-    private final ObjectMapper objectMapper;
-
-    public FoodCommandHandler(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     @KafkaHandler
-    public void handleCommand(String s) {
-        ReserveFoodCommand reserveFoodCommand = objectMapper.readValue(s, ReserveFoodCommand.class);
-        LOGGER.info("ReserveFoodCommand: {}", s);
+    public void handleCommand(ReserveFoodCommand reserveFoodCommand) {
+        LOGGER.info("ReserveFoodCommand: orderId: {}, reserveFoodCommand: {}", reserveFoodCommand.getOrderId(), reserveFoodCommand.toString());
     }
 }
