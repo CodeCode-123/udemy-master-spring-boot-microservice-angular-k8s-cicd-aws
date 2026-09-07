@@ -2,8 +2,11 @@ package com.codecode.foodcatalogue.service;
 
 
 import com.codecode.core.dto.FoodItemDTO;
+import com.codecode.foodcatalogue.entity.FoodReservation;
+
+import java.util.List;
 
 public interface FoodReservationService {
-    FoodItemDTO reserve(FoodItemDTO foodItemDTO, Integer orderId);
-    void cancelReservation(FoodItemDTO foodItemToCancel, Integer orderId);
+    List<FoodReservation> reserve(List<FoodItemDTO> foodItemDTOList, Integer orderId);
+    void cancelReservation(Integer orderId);
 }

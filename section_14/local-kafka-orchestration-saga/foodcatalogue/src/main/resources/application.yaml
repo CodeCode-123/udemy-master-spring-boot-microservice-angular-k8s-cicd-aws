@@ -38,6 +38,7 @@ spring:
               requests:
                 per:
                   connection: 5
+#      transaction-id-prefix: foodcatalogue-service-${random.value}-
 
     consumer:
       group-id: foodcatalogue-ms
@@ -62,3 +63,12 @@ app:
     url: http://restaurantlisting/restaurant/fetchById/
   kafka:
     food-command-topic: "food-command"
+    food-event-topic: "food-event"
+
+logging:
+  level:
+    org.springframework.kafka.transaction.KafkaTransactionManager: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
+    org.apache.kafka.clients.producer.internals.TransactionManager: DEBUG
+
