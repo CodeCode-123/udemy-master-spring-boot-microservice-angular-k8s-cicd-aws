@@ -16,6 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
@@ -36,6 +40,7 @@ public class OrderService {
     private final ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String orderEventTopic;
+    private final MongoTemplate mongoTemplate;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
@@ -51,12 +56,14 @@ public class OrderService {
     @Autowired
     public OrderService(OrderRepo orderRepo, SequenceGenerator sequenceGenerator,
                         ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate, KafkaTemplate<String, Object> kafkaTemplate,
-                        @Value("${app.kafka.order-event-topic}") String orderEventTopic) {
+                        @Value("${app.kafka.order-event-topic}") String orderEventTopic,
+                        MongoTemplate mongoTemplate) {
         this.orderRepo = orderRepo;
         this.sequenceGenerator = sequenceGenerator;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
         this.kafkaTemplate = kafkaTemplate;
         this.orderEventTopic = orderEventTopic;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public OrderDTO saveOrderInDb(OrderDTOFromFE orderDTOFromFE) throws ExecutionException, InterruptedException {
@@ -127,22 +134,25 @@ public class OrderService {
         return order;
     }
 
-//    private double calculateTotalAmount(OrderDTO orderDTO) {
-//        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
-//        double sum = 0;
-//        for (FoodItemDTO foodItemDTO: foodItemDTOList) {
-//            double price = foodItemDTO.getPrice();
-//            int quantity = foodItemDTO.getQuantity();
-//            sum += price * quantity;
-//        }
-//        return sum;
-//    }
-//
-//    private void throwPaymentException() throws PaymentKafkaException {
-//        throw new PaymentKafkaException("Failed to send Payment");
-//    }
-//
-//    private void throwMessageException() throws MessageKafkaException {
-//        throw new MessageKafkaException("Failed to send Message");
-//    }
+    public Order approveOrder(Integer orderId) {
+        Query query = new Query(Criteria.where("orderId").is(orderId));
+        Update update = new Update().set("orderStatus", OrderStatus.APPROVED);
+        mongoTemplate.updateFirst(query, update, Order.class);
+        Optional<Order> orderOptional = orderRepo.findByOrderId(orderId);
+        if (orderOptional.isEmpty()) {
+            throw new NotFoundException("Order is not found by orderId: " + orderId);
+        }
+        return orderOptional.get();
+    }
+
+    public Order rejectOrder(Integer orderId) {
+        Query query = new Query(Criteria.where("orderId").is(orderId));
+        Update update = new Update().set("orderStatus", OrderStatus.REJECTED);
+        mongoTemplate.updateFirst(query, update, Order.class);
+        Optional<Order> orderOptional = orderRepo.findByOrderId(orderId);
+        if (orderOptional.isEmpty()) {
+            throw new NotFoundException("Order is not found by orderId: " + orderId);
+        }
+        return orderOptional.get();
+    }
 }

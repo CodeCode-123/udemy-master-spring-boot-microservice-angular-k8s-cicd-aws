@@ -62,6 +62,7 @@ app:
     food-event-topic: "food-event"
     payment-command-topic: "payment-command"
     payment-event-topic: "payment-event"
+    order-command-topic: "order-command"
 
 #logging:
 #  level:

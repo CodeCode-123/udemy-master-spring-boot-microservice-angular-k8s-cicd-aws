@@ -13,17 +13,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentFailedEvent {
+public class FoodReservationCancelledEvent {
     private Integer orderId;
-    private Double totalPrice;
     private List<FoodItemReservation> foodItemReservationList;
 
     @Override
     public String toString() {
-        return "PaymentFailedEvent{" +
+        return "FoodReservationCancelledEvent{" +
                 "orderId=" + orderId +
-                ", totalPrice=" + totalPrice +
-                ", foodItemReservationList=" + getFoodItemReservationListToString() +
+                ", foodItemReservationList=" + foodItemReservationList +
                 '}';
     }
 

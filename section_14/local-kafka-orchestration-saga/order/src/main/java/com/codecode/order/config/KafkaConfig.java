@@ -64,6 +64,9 @@ public class KafkaConfig {
     @Value("${app.kafka.payment-command-topic}")
     private String paymentCommandTopic;
 
+    @Value("${app.kafka.order-command-topic}")
+    private String orderCommandTopic;
+
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
@@ -167,6 +170,15 @@ public class KafkaConfig {
     public NewTopic createPaymentCommandTopic() {
         return TopicBuilder
                 .name(paymentCommandTopic)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
+    }
+
+    @Bean
+    public NewTopic createOrderCommandTopic() {
+        return TopicBuilder
+                .name(orderCommandTopic)
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();

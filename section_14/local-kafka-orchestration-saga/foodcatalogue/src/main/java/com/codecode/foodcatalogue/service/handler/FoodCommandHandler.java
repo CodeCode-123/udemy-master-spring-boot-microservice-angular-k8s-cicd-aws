@@ -2,7 +2,9 @@ package com.codecode.foodcatalogue.service.handler;
 
 import com.codecode.core.dto.FoodItemDTO;
 import com.codecode.core.dto.FoodItemReservation;
+import com.codecode.core.dto.command.CancelFoodReservationCommand;
 import com.codecode.core.dto.command.ReserveFoodCommand;
+import com.codecode.core.dto.event.FoodReservationCancelledEvent;
 import com.codecode.core.dto.event.FoodReservationFailedEvent;
 import com.codecode.core.dto.event.FoodReservedEvent;
 import com.codecode.foodcatalogue.entity.FoodReservation;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@KafkaListener(topics="${app.kafka.food-command-topic}")
+//@KafkaListener(topics="${app.kafka.food-command-topic}")
 public class FoodCommandHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FoodCommandHandler.class);
     private final FoodReservationService foodReservationService;
@@ -36,7 +38,8 @@ public class FoodCommandHandler {
     }
 
     //@Transactional
-    @KafkaHandler
+    //@KafkaHandler
+    @KafkaListener(topics="${app.kafka.food-command-topic}", groupId = "foodcatalogue-ms-1")
     public void handleCommand(ReserveFoodCommand reserveFoodCommand) {
         LOGGER.info("ReserveFoodCommand: orderId: {}, reserveFoodCommand: {}", reserveFoodCommand.getOrderId(), reserveFoodCommand.toString());
         List<FoodItemDTO> foodItemDTOList = reserveFoodCommand.getFoodItemDTOList();
@@ -65,6 +68,18 @@ public class FoodCommandHandler {
         }
     }
 
+    @KafkaListener(topics="${app.kafka.food-command-topic}", groupId = "foodcatalogue-ms-2")
+    public void handleCommand(CancelFoodReservationCommand command) {
+        LOGGER.info("CancelFoodReservationCommand: {}", command.toString());
+        List<FoodItemReservation> foodItemReservationList = command.getFoodItemReservationList();
+        Integer orderId = command.getOrderId();
+        foodReservationService.cancelReservation(orderId, foodItemReservationList);
+        FoodReservationCancelledEvent foodReservationCancelledEvent = new FoodReservationCancelledEvent();
+        foodReservationCancelledEvent.setOrderId(orderId);
+        foodReservationCancelledEvent.setFoodItemReservationList(foodItemReservationList);
+        //send to OrderSaga
+        kafkaTemplate.send(foodEventTopic, foodReservationCancelledEvent);
+    }
 
     private FoodItemReservation convertToFoodItemReservation(FoodItemDTO foodItemDTO) {
         FoodItemReservation foodItemReservation = new FoodItemReservation();
@@ -74,6 +89,7 @@ public class FoodCommandHandler {
         return foodItemReservation;
     }
 
+    //method for test
     private void throwException() {
         throw new NotFoundException();
     }

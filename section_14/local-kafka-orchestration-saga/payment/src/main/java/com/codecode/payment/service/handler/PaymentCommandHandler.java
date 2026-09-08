@@ -5,6 +5,7 @@ import com.codecode.core.dto.event.PaymentFailedEvent;
 import com.codecode.core.dto.event.PaymentProcessedEvent;
 import com.codecode.payment.entity.Payment;
 import com.codecode.payment.service.PaymentService;
+import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,8 @@ public class PaymentCommandHandler {
     public void handler(ProcessPaymentCommand command) {
         LOGGER.info("Process Payment Command: {}", command.getProcessPaymentCommandToString());
         try {
+            //test for payment failed event
+            //throwException();
             //process the payment and save the payment to the relational database
             Payment payment = new Payment(command.getOrderId(), command.getTotalPrice());
             paymentService.process(payment);
@@ -43,10 +46,14 @@ public class PaymentCommandHandler {
             LOGGER.info("Payment Processed Event: {}", paymentProcessedEvent.toString());
         } catch (Exception e) {
             PaymentFailedEvent paymentFailedEvent = new PaymentFailedEvent(
-                    command.getOrderId(), command.getTotalPrice());
+                    command.getOrderId(), command.getTotalPrice(), command.getFoodItemReservationList());
             //send to Kafka broker
             kafkaTemplate.send(paymentEventTopic, paymentFailedEvent);
             LOGGER.info("Payment Failed Event: {}", paymentFailedEvent.toString());
         }
+    }
+
+    private void throwException() {
+        throw new NotFoundException();
     }
 }

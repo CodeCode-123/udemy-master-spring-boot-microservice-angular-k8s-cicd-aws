@@ -1,8 +1,8 @@
 package com.codecode.order.saga;
 
+import com.codecode.core.dto.FoodItemDTO;
 import com.codecode.core.dto.FoodItemReservation;
-import com.codecode.core.dto.command.ProcessPaymentCommand;
-import com.codecode.core.dto.command.ReserveFoodCommand;
+import com.codecode.core.dto.command.*;
 import com.codecode.core.dto.event.*;
 import com.codecode.core.types.OrderStatus;
 import com.codecode.order.entity.OrderHistory;
@@ -18,7 +18,9 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //a list of @KafkaHandler will receive different events, and then send different commands
 @Component
@@ -34,6 +36,9 @@ public class OrderSaga {
 
     @Value("${app.kafka.payment-command-topic}")
     private String paymentCommandTopic;
+
+    @Value("${app.kafka.order-command-topic}")
+    private String orderCommandTopic;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final OrderHistoryService orderHistoryService;
@@ -80,10 +85,31 @@ public class OrderSaga {
     @KafkaListener(topics = "${app.kafka.payment-event-topic}", groupId = "order-ms-1")
     public void handleEvent(PaymentProcessedEvent paymentProcessedEvent) {
         LOGGER.info("Payment Processed Event: {}", paymentProcessedEvent);
+        ApproveOrderCommand approveOrderCommand = new ApproveOrderCommand(paymentProcessedEvent.getOrderId());
+        kafkaTemplate.send(orderCommandTopic, approveOrderCommand);
     }
 
     @KafkaListener(topics = "${app.kafka.payment-event-topic}", groupId = "order-ms-2")
     public void handleEvent(PaymentFailedEvent paymentFailedEvent) {
-        LOGGER.info("Payment Failed Event: {}", paymentFailedEvent);
+        LOGGER.info("Payment Failed Event: {}", paymentFailedEvent.toString());
+        List<FoodItemReservation> foodItemReservationList = paymentFailedEvent.getFoodItemReservationList();
+        CancelFoodReservationCommand cancelFoodReservationCommand = new CancelFoodReservationCommand();
+        cancelFoodReservationCommand.setOrderId(paymentFailedEvent.getOrderId());
+        cancelFoodReservationCommand.setFoodItemReservationList(foodItemReservationList);
+        kafkaTemplate.send(foodCommandTopic, cancelFoodReservationCommand);
+    }
+
+    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms-1")
+    public void handleEvent(OrderApprovedEvent orderApprovedEvent) {
+        LOGGER.info("Order Approved Event: {}", orderApprovedEvent);
+        orderHistoryService.add(orderApprovedEvent.getOrderId(), OrderStatus.APPROVED);
+    }
+
+    @KafkaListener(topics = "${app.kafka.food-event-topic}", groupId = "order-ms-3")
+    public void handleEvent(FoodReservationCancelledEvent event) {
+        LOGGER.info("Food Reservation Cancelled Event: {}", event.toString());
+        RejectOrderCommand rejectOrderCommand = new RejectOrderCommand(event.getOrderId());
+        kafkaTemplate.send(orderCommandTopic, rejectOrderCommand);
+        orderHistoryService.add(event.getOrderId(), OrderStatus.REJECTED);
     }
 }

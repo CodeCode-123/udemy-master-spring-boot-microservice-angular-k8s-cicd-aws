@@ -1,5 +1,4 @@
-package com.codecode.core.dto.event;
-
+package com.codecode.core.dto.command;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,12 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderApprovedEvent {
+public class RejectOrderCommand {
     private Integer orderId;
 
     @Override
     public String toString() {
-        return "OrderApprovedEvent{" +
+        return "RejectOrderCommand{" +
                 "orderId=" + orderId +
                 '}';
     }
