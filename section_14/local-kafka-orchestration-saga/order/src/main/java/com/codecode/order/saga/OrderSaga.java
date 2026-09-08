@@ -3,9 +3,7 @@ package com.codecode.order.saga;
 import com.codecode.core.dto.FoodItemReservation;
 import com.codecode.core.dto.command.ProcessPaymentCommand;
 import com.codecode.core.dto.command.ReserveFoodCommand;
-import com.codecode.core.dto.event.FoodReservationFailedEvent;
-import com.codecode.core.dto.event.FoodReservedEvent;
-import com.codecode.core.dto.event.OrderCreatedEvent;
+import com.codecode.core.dto.event.*;
 import com.codecode.core.types.OrderStatus;
 import com.codecode.order.entity.OrderHistory;
 import com.codecode.order.service.OrderHistoryService;
@@ -24,10 +22,10 @@ import java.util.List;
 
 //a list of @KafkaHandler will receive different events, and then send different commands
 @Component
-@KafkaListener(topics = {
-        "${app.kafka.order-event-topic}",
-        "${app.kafka.food-event-topic}"
-})
+//@KafkaListener(topics = {
+//        "${app.kafka.order-event-topic}",
+//        "${app.kafka.food-event-topic}"
+//})
 public class OrderSaga {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderSaga.class);
 
@@ -46,7 +44,8 @@ public class OrderSaga {
         this.orderHistoryService = orderHistoryService;
     }
 
-    @KafkaHandler
+    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms")
+    //@KafkaHandler
     public void handleEvent(OrderCreatedEvent orderCreatedEvent) {
         LOGGER.info("Order Created Event: orderId: {}, orderCreatedEvent: {}", orderCreatedEvent.getOrderId(), orderCreatedEvent.toString());
         ReserveFoodCommand reserveFoodCommand = new ReserveFoodCommand(orderCreatedEvent.getOrderId(),
@@ -55,7 +54,8 @@ public class OrderSaga {
         orderHistoryService.saveOrderHistoryInDb(orderCreatedEvent);
     }
 
-    @KafkaHandler
+    //annotated with the topics to the method
+    @KafkaListener(topics = "${app.kafka.food-event-topic}", groupId = "order-ms-1")
     public void handleEvent(FoodReservedEvent event) {
         LOGGER.info("Food Reserved Event: {}", event.toString());
         ProcessPaymentCommand processPaymentCommand = new ProcessPaymentCommand();
@@ -72,9 +72,18 @@ public class OrderSaga {
         kafkaTemplate.send(paymentCommandTopic, processPaymentCommand);
     }
 
-    @KafkaHandler
+    @KafkaListener(topics = "${app.kafka.food-event-topic}", groupId = "order-ms-2")
     public void handleEvent(FoodReservationFailedEvent event) {
         LOGGER.info("Food Reservation Failed: {}", event.toString());
-//        System.out.println("Food Reservation Failed: " + event.getFoodReservationFailedEventToString());
+    }
+
+    @KafkaListener(topics = "${app.kafka.payment-event-topic}", groupId = "order-ms-1")
+    public void handleEvent(PaymentProcessedEvent paymentProcessedEvent) {
+        LOGGER.info("Payment Processed Event: {}", paymentProcessedEvent);
+    }
+
+    @KafkaListener(topics = "${app.kafka.payment-event-topic}", groupId = "order-ms-2")
+    public void handleEvent(PaymentFailedEvent paymentFailedEvent) {
+        LOGGER.info("Payment Failed Event: {}", paymentFailedEvent);
     }
 }

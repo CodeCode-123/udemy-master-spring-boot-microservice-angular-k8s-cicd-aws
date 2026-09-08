@@ -41,13 +41,4 @@ public class KafkaConfig {
         return new ReplyingKafkaTemplate<>(producerFactory, repliesContainer);
     }
 
-//    @Bean("kafkaTransactionManager")
-//    public KafkaTransactionManager<String, Object> kafkaTransactionManager(ProducerFactory<String, Object> producerFactory) {
-//        return new KafkaTransactionManager<>(producerFactory);
-//    }
-
-//    @Bean("transactionManager")
-//    public JpaTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
-//        return new JpaTransactionManager(entityManagerFactory);
-//    }
 }

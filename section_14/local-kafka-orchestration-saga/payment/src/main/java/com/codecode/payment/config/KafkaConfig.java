@@ -1,5 +1,6 @@
 package com.codecode.payment.config;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -25,11 +27,41 @@ public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.producer.key-serializer}")
+    private String keySerializer;
+
+    @Value("${spring.kafka.producer.value-serializer}")
+    private String valueSerializer;
+
+    @Value("${spring.kafka.producer.acks}")
+    private String acks;
+
+    @Value("${spring.kafka.producer.properties.delivery.timeout.ms}")
+    private String deliveryTimeout;
+
+    @Value("${spring.kafka.producer.properties.linger.ms}")
+    private String linger;
+
+    @Value("${spring.kafka.producer.properties.request.timeout.ms}")
+    private String requestTimeout;
+
+    @Value("${spring.kafka.producer.properties.enable.idempotence}")
+    private boolean idempotence;
+
+    @Value("${spring.kafka.producer.properties.max.in.flight.requests.per.connection}")
+    private Integer inflightRequests;
+
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
 
     @Value("${spring.kafka.consumer.properties.spring.json.trusted.packages}")
     private String trustedPackages;
+
+    @Value("${app.kafka.payment-event-topic}")
+    private String paymentEventTopic;
+
+    private final static Integer TOPIC_REPLICATION_FACTOR=3;
+    private final static Integer TOPIC_PARTITIONS=3;
 
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
@@ -62,13 +94,33 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory);
     }
 
-    @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    Map<String, Object> producerConfigs() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonDeserializer.class);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
+        config.put(ProducerConfig.ACKS_CONFIG, acks);
+        config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, linger);
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        //default set is true, but explicitly set it will avoid disable it due to conflict configurations
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotence);
+        config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, inflightRequests);
 
-        return new DefaultKafkaProducerFactory<>(config);
+        return config;
+    }
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public NewTopic createPaymentEventTopic() {
+        return TopicBuilder
+                .name(paymentEventTopic)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
     }
 }

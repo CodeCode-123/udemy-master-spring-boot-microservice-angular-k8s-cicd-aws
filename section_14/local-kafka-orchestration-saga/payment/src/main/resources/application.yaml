@@ -16,6 +16,29 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092,localhost:9094
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      acks: all
+      properties:
+        delivery:
+          timeout:
+            ms: 120000
+        linger:
+          ms: 0
+        request:
+          timeout:
+            ms: 30000
+        enable:
+          idempotence: true
+        max:
+          in:
+            flight:
+              requests:
+                per:
+                  connection: 5
+
     consumer:
       group-id: payment-ms
       auto-offset-reset: earliest
@@ -37,6 +60,7 @@ spring:
 app:
   kafka:
     payment-command-topic: "payment-command"
+    payment-event-topic: "payment-event"
 
 logging:
   level:
