@@ -53,6 +53,11 @@ public class FoodCatalogueServiceImpl implements FoodCatalogueService {
     private FoodItemDTO mapFoodItemToFoodItemDTO(FoodItem foodItem) {
         FoodItemDTO foodItemDTO = new FoodItemDTO();
         BeanUtils.copyProperties(foodItem, foodItemDTO);
+        if (foodItem.isVeg()) {
+            foodItemDTO.setIsVeg(Boolean.TRUE);
+        } else {
+            foodItemDTO.setIsVeg(Boolean.FALSE);
+        }
         return foodItemDTO;
     }
 

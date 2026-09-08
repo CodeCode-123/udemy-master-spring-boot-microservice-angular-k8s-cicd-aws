@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class FoodItemDTO {
     private int id;
     private String itemName;
@@ -15,4 +14,17 @@ public class FoodItemDTO {
     private Double price;
     private Integer restaurantId;
     private Integer quantity;
+
+    @Override
+    public String toString() {
+        return "FoodItemDTO{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", isVeg=" + isVeg +
+                ", price=" + price +
+                ", restaurantId=" + restaurantId +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

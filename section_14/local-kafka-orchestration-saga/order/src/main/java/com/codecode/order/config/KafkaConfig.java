@@ -61,6 +61,9 @@ public class KafkaConfig {
     @Value("${app.kafka.food-command-topic}")
     private String foodCommandTopic;
 
+    @Value("${app.kafka.payment-command-topic}")
+    private String paymentCommandTopic;
+
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
@@ -155,6 +158,15 @@ public class KafkaConfig {
     public NewTopic createFoodCommandTopic() {
         return TopicBuilder
                 .name(foodCommandTopic)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
+    }
+
+    @Bean
+    public NewTopic createPaymentCommandTopic() {
+        return TopicBuilder
+                .name(paymentCommandTopic)
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();

@@ -25,28 +25,21 @@ public class FoodReservationServiceImpl implements FoodReservationService {
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public List<FoodReservation> reserve(List<FoodItemDTO> foodItemDTOList, Integer orderId) {
         List<FoodReservation> foodReservationList = new ArrayList<>();
         for (FoodItemDTO foodItemDTO: foodItemDTOList) {
             int foodItemId = foodItemDTO.getId();
             Optional<FoodItem> foodItemOptional = foodItemRepo.findById(foodItemId);
-            System.out.println("Before loop");
             if (foodItemOptional.isEmpty()) {
-                System.out.println("Not Found");
                 throw new NotFoundException("FoodItem is not found by foodItemId: " + foodItemId);
             }
-            System.out.println("After Loop");
-            System.out.println(foodItemDTO.toString());
             FoodReservation foodReservation = convertFoodItemDTOToFoodReservation(foodItemDTO);
             foodReservation.setVeg(foodItemOptional.get().isVeg());
-            System.out.println("After Convert to FoodReservation");
             foodReservation.setOrderId(orderId);
-            System.out.println("foodReservation foodItemId: " + foodReservation.getFoodItemId());
-            foodReservationRepo.save(foodReservation);
             foodReservationList.add(foodReservation);
         }
-        //foodReservationRepo.saveAll(foodReservationList);
+        foodReservationRepo.saveAll(foodReservationList);
         return foodReservationList;
     }
 

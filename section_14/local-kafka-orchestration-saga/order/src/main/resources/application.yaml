@@ -59,6 +59,8 @@ app:
     reply-topic: "fetch-user-reply"
     order-event-topic: "order-event"
     food-command-topic: "food-command"
+    food-event-topic: "food-event"
+    payment-command-topic: "payment-command"
 
 #logging:
 #  level:

@@ -16,7 +16,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,27 +49,22 @@ public class FoodCommandHandler {
         }
 
         try {
+            //Test with different condition
+            //throwException();
             //save to the database
             List<FoodReservation> foodReservationList = foodReservationService.reserve(foodItemDTOList, orderId);
             FoodReservedEvent foodReservedEvent = new FoodReservedEvent(foodItemReservationList);
             //send to the Kafka broker
             kafkaTemplate.send(foodEventTopic, foodReservedEvent);
-            LOGGER.info("Food Reserved: {}", foodReservedEvent.toString());
+            LOGGER.info("Food Reserved: {}", foodReservedEvent.getFoodReservedEventToString());
         } catch (Exception e) {
+            LOGGER.error(e.getLocalizedMessage(), e);
             FoodReservationFailedEvent foodReservationFailedEvent = new FoodReservationFailedEvent(foodItemReservationList);
             kafkaTemplate.send(foodEventTopic, foodReservationFailedEvent);
-            LOGGER.info("Food Reservation Failed: {}", foodReservationFailedEvent.toString());
+            LOGGER.info("Food Reservation Failed: {}", foodReservationFailedEvent.getFoodReservationFailedEventToString());
         }
     }
 
-//    private FoodItemReservation convertToFoodItemReservation(FoodReservation foodReservation) {
-//        FoodItemReservation foodItemReservation = new FoodItemReservation();
-//        foodItemReservation.setFoodItemId(foodReservation.getFoodItemId());
-//        foodItemReservation.setOrderId(foodItemReservation.getOrderId());
-//        foodItemReservation.setPrice(foodItemReservation.getPrice());
-//        foodItemReservation.setQuantity(foodReservation.getQuantity());
-//        return foodItemReservation;
-//    }
 
     private FoodItemReservation convertToFoodItemReservation(FoodItemDTO foodItemDTO) {
         FoodItemReservation foodItemReservation = new FoodItemReservation();

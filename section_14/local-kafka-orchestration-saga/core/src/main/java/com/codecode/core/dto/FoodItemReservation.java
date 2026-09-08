@@ -15,4 +15,14 @@ public class FoodItemReservation {
     private Integer foodItemId;
     private Double price;
     private Integer quantity;
+
+    @Override
+    public String toString() {
+        return "FoodItemReservation{" +
+                "orderId=" + orderId +
+                ", foodItemId=" + foodItemId +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

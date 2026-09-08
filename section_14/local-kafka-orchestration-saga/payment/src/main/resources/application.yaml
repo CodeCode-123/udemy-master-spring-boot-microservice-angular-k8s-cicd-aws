@@ -33,3 +33,14 @@ spring:
             value:
               delegate:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+app:
+  kafka:
+    payment-command-topic: "payment-command"
+
+logging:
+  level:
+    org.springframework.kafka.transaction.KafkaTransactionManager: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
+    org.apache.kafka.clients.producer.internals.TransactionManager: DEBUG
