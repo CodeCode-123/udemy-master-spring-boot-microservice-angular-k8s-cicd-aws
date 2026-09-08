@@ -1,5 +1,7 @@
 package com.codecode.message.controller;
 
+import com.codecode.core.dto.event.MessageApprovalEvent;
+import com.codecode.core.dto.event.MessageRejectionEvent;
 import jakarta.ws.rs.Path;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -17,21 +19,40 @@ public class MessageController {
         this.cacheManager = cacheManager;
     }
 
-//    @GetMapping("/order")
-//    public OrderDTO getOrderDTO() {
-//        Cache cache = cacheManager.getCache("orderdto");
-//        if (cache != null) {
-//            return cache.get("order", OrderDTO.class);
-//        }
-//        return null;
-//    }
-//
-//    @GetMapping("/order/{orderId}")
-//    public OrderDTO getOrderDTOByOrderId(@PathVariable("orderId") Integer orderId) {
-//        Cache cache = cacheManager.getCache("orderdto");
-//        if (cache != null) {
-//            return cache.get(String.valueOf(orderId), OrderDTO.class);
-//        }
-//        return null;
-//    }
+    @GetMapping("/orderapproval")
+    public MessageApprovalEvent getMessageApprovalEvent() {
+        Cache cache = cacheManager.getCache("order-approval");
+        if (cache != null) {
+            return cache.get("approval", MessageApprovalEvent.class);
+        }
+        return null;
+    }
+
+    @GetMapping("/orderapproval/{orderId}")
+    public MessageApprovalEvent getMessageApprovalEventByOrderId(@PathVariable("orderId") Integer orderId) {
+        Cache cache = cacheManager.getCache("order-approval");
+        if (cache != null) {
+            return cache.get(String.valueOf(orderId), MessageApprovalEvent.class);
+        }
+        return null;
+    }
+
+    @GetMapping("/orderrejection")
+    public MessageRejectionEvent getMessageRejectionEvent() {
+        Cache cache = cacheManager.getCache("order-rejection");
+        if (cache != null) {
+            return cache.get("rejection", MessageRejectionEvent.class);
+        }
+        return null;
+    }
+
+    @GetMapping("/orderrejection/{orderId}")
+    public MessageRejectionEvent getMessageRejectionEventByOrderId(@PathVariable("orderId") Integer orderId) {
+        Cache cache = cacheManager.getCache("order-rejection");
+        if (cache != null) {
+            return cache.get(String.valueOf(orderId), MessageRejectionEvent.class);
+        }
+        return null;
+    }
+
 }

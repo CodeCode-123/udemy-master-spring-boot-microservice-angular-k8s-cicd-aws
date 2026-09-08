@@ -35,7 +35,7 @@ public class PaymentCommandHandler {
         LOGGER.info("Process Payment Command: {}", command.getProcessPaymentCommandToString());
         try {
             //test for payment failed event
-            //throwException();
+            throwException();
             //process the payment and save the payment to the relational database
             Payment payment = new Payment(command.getOrderId(), command.getTotalPrice());
             paymentService.process(payment);

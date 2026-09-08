@@ -1,4 +1,0 @@
-package com.codecode.core.dto.event;
-
-public class MessageFailedEvent {
-}

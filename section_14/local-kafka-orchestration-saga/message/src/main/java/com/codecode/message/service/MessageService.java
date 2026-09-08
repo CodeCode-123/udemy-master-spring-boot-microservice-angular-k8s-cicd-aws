@@ -1,5 +1,9 @@
 package com.codecode.message.service;
 
+import com.codecode.core.dto.command.OrderApprovalMessageCommand;
+import com.codecode.core.dto.command.OrderRejectionMessageCommand;
+import com.codecode.core.dto.event.MessageApprovalEvent;
+import com.codecode.core.dto.event.MessageRejectionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
@@ -12,25 +16,36 @@ import java.util.Map;
 
 @Service
 public class MessageService {
-//    private final ObjectMapper objectMapper;
     private final CacheManager cacheManager;
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
     public MessageService(CacheManager cacheManager) {
-//        this.objectMapper = objectMapper;
         this.cacheManager = cacheManager;
     }
 
-//    @KafkaListener(topics = "fetch-orderdto")
-//    //@Cacheable(value="orderdto", key="order")
-//    public OrderDTO getOrderDTO(String s) {
-//        LOGGER.info("Received orderDTO: m{}", s);
-//        OrderDTO orderDTO = objectMapper.readValue(s, OrderDTO.class);
-//        Cache cache = cacheManager.getCache("orderdto");
-//        if (cache != null) {
-//            cache.put(String.valueOf(orderDTO.getOrderId()), orderDTO);
-//            cache.put("order", orderDTO);
-//        }
-//        return orderDTO;
-//    }
+    public MessageApprovalEvent getMessageApprovalEvent(OrderApprovalMessageCommand command) {
+        MessageApprovalEvent event = new MessageApprovalEvent();
+        event.setOrderId(command.getOrderId());
+        event.setFoodItemDTOList(command.getFoodItemDTOList());
+        event.setUserDTO(command.getUserDTO());
+        Cache cache = cacheManager.getCache("order-approval");
+        if (cache != null) {
+            cache.put(String.valueOf(event.getOrderId()), event);
+            cache.put("approval", event);
+        }
+        return event;
+    }
+
+    public MessageRejectionEvent getMessageRejectionEvent(OrderRejectionMessageCommand command) {
+        MessageRejectionEvent event = new MessageRejectionEvent();
+        event.setOrderId(command.getOrderId());
+        event.setFoodItemDTOList(command.getFoodItemDTOList());
+        event.setUserDTO(command.getUserDTO());
+        Cache cache = cacheManager.getCache("order-rejection");
+        if (cache != null) {
+            cache.put(String.valueOf(event.getOrderId()), event);
+            cache.put("rejection", event);
+        }
+        return event;
+    }
 }

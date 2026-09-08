@@ -63,6 +63,7 @@ app:
     payment-command-topic: "payment-command"
     payment-event-topic: "payment-event"
     order-command-topic: "order-command"
+    message-command-topic: "message-command"
 
 #logging:
 #  level:

@@ -2,11 +2,14 @@ package com.codecode.order.saga;
 
 import com.codecode.core.dto.FoodItemDTO;
 import com.codecode.core.dto.FoodItemReservation;
+import com.codecode.core.dto.OrderDTO;
 import com.codecode.core.dto.command.*;
 import com.codecode.core.dto.event.*;
 import com.codecode.core.types.OrderStatus;
+import com.codecode.order.entity.Order;
 import com.codecode.order.entity.OrderHistory;
 import com.codecode.order.service.OrderHistoryService;
+import com.codecode.order.service.OrderService;
 import com.codecode.order.service.SequenceGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,16 +43,21 @@ public class OrderSaga {
     @Value("${app.kafka.order-command-topic}")
     private String orderCommandTopic;
 
+    @Value("${app.kafka.message-command-topic}")
+    private String messageCommandTopic;
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final OrderHistoryService orderHistoryService;
+    private final OrderService orderService;
 
     public OrderSaga(KafkaTemplate<String, Object> kafkaTemplate,
-                     OrderHistoryService orderHistoryService) {
+                     OrderHistoryService orderHistoryService, OrderService orderService) {
         this.kafkaTemplate = kafkaTemplate;
         this.orderHistoryService = orderHistoryService;
+        this.orderService = orderService;
     }
 
-    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms")
+    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms-1")
     //@KafkaHandler
     public void handleEvent(OrderCreatedEvent orderCreatedEvent) {
         LOGGER.info("Order Created Event: orderId: {}, orderCreatedEvent: {}", orderCreatedEvent.getOrderId(), orderCreatedEvent.toString());
@@ -99,10 +107,32 @@ public class OrderSaga {
         kafkaTemplate.send(foodCommandTopic, cancelFoodReservationCommand);
     }
 
-    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms-1")
+    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms-2")
     public void handleEvent(OrderApprovedEvent orderApprovedEvent) {
         LOGGER.info("Order Approved Event: {}", orderApprovedEvent);
+        //save to the order history document
         orderHistoryService.add(orderApprovedEvent.getOrderId(), OrderStatus.APPROVED);
+        //retrieve Order from the database
+        OrderDTO orderDTO = orderService.getOrderByOrderId(orderApprovedEvent.getOrderId());
+        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
+        OrderApprovalMessageCommand command = new OrderApprovalMessageCommand();
+        command.setOrderId(orderApprovedEvent.getOrderId());
+        command.setFoodItemDTOList(orderDTO.getFoodItemsList());
+        command.setUserDTO(orderDTO.getUserDTO());
+        //send message command to message service
+        kafkaTemplate.send(messageCommandTopic, command);
+    }
+
+    @KafkaListener(topics = "${app.kafka.order-event-topic}", groupId = "order-ms-3")
+    public void handleEvent(OrderRejectedEvent orderRejectedEvent) {
+        OrderDTO orderDTO = orderService.getOrderByOrderId(orderRejectedEvent.getOrderId());
+        List<FoodItemDTO> foodItemDTOList = orderDTO.getFoodItemsList();
+        OrderRejectionMessageCommand command = new OrderRejectionMessageCommand();
+        command.setOrderId(orderRejectedEvent.getOrderId());
+        command.setFoodItemDTOList(orderDTO.getFoodItemsList());
+        command.setUserDTO(orderDTO.getUserDTO());
+        //send message command to message service
+        kafkaTemplate.send(messageCommandTopic, command);
     }
 
     @KafkaListener(topics = "${app.kafka.food-event-topic}", groupId = "order-ms-3")
@@ -111,5 +141,6 @@ public class OrderSaga {
         RejectOrderCommand rejectOrderCommand = new RejectOrderCommand(event.getOrderId());
         kafkaTemplate.send(orderCommandTopic, rejectOrderCommand);
         orderHistoryService.add(event.getOrderId(), OrderStatus.REJECTED);
+
     }
 }

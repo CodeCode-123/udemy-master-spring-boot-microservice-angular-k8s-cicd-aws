@@ -3,6 +3,7 @@ package com.codecode.order.service.handler;
 import com.codecode.core.dto.command.ApproveOrderCommand;
 import com.codecode.core.dto.command.RejectOrderCommand;
 import com.codecode.core.dto.event.OrderApprovedEvent;
+import com.codecode.core.dto.event.OrderRejectedEvent;
 import com.codecode.core.dto.event.PaymentProcessedEvent;
 import com.codecode.order.entity.Order;
 import com.codecode.order.service.OrderService;
@@ -42,6 +43,8 @@ public class OrderCommandHandler {
         //LOGGER.info("Reject Order Command: {}", command.toString());
         Order order = orderService.rejectOrder(command.getOrderId());
         LOGGER.info("Rejected Order: Order Id: {}, Order Status: {}", order.getOrderId(), order.getOrderStatus());
+        OrderRejectedEvent orderRejectedEvent = new OrderRejectedEvent(command.getOrderId());
+        kafkaTemplate.send(orderEventTopic, orderRejectedEvent);
     }
 
 }
