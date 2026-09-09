@@ -2,9 +2,12 @@ package com.codecode.message.controller;
 
 import com.codecode.core.dto.event.MessageApprovalEvent;
 import com.codecode.core.dto.event.MessageRejectionEvent;
-import jakarta.ws.rs.Path;
+import com.codecode.message.dto.MessageContactDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/message")
 public class MessageController {
     private final CacheManager cacheManager;
+    private final MessageContactDTO messageContactDTO;
 
-    public MessageController(CacheManager cacheManager) {
+    @Value("${build.version}")
+    private String buildVersion;
+
+    public MessageController(CacheManager cacheManager, MessageContactDTO messageContactDTO) {
         this.cacheManager = cacheManager;
+        this.messageContactDTO = messageContactDTO;
     }
 
     @GetMapping("/orderapproval")
@@ -53,6 +61,16 @@ public class MessageController {
             return cache.get(String.valueOf(orderId), MessageRejectionEvent.class);
         }
         return null;
+    }
+
+    @GetMapping("/build-version")
+    public ResponseEntity<String> getBuildVersion() {
+        return new ResponseEntity<>(buildVersion, HttpStatus.OK);
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<MessageContactDTO> getContactInfo() {
+        return new ResponseEntity<>(messageContactDTO, HttpStatus.OK);
     }
 
 }

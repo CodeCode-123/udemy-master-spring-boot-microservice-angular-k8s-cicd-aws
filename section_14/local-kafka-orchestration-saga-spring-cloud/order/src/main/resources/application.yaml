@@ -6,6 +6,8 @@ spring:
     active: local
   application:
     name: order
+  config:
+    import: "optional:configserver:http://localhost:8071/"
 
   kafka:
     bootstrap-servers: localhost:9092,localhost:9094

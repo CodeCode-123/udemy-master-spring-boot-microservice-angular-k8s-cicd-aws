@@ -1,5 +1,6 @@
 package com.codecode.order.config;
 
+import com.codecode.order.dto.OrderContactInfoDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -182,5 +183,10 @@ public class KafkaConfig {
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();
+    }
+
+    @Bean
+    public OrderContactInfoDTO getOrderContactInfoDTO() {
+        return new OrderContactInfoDTO();
     }
 }

@@ -2,9 +2,11 @@ package com.codecode.order.controller;
 
 
 import com.codecode.core.dto.OrderDTO;
+import com.codecode.order.dto.OrderContactInfoDTO;
 import com.codecode.order.dto.OrderDTOFromFE;
 import com.codecode.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,15 @@ import java.util.concurrent.ExecutionException;
 @CrossOrigin
 public class OrderController {
     private final OrderService orderService;
+    private final OrderContactInfoDTO orderContactInfoDTO;
+
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderContactInfoDTO orderContactInfoDTO) {
         this.orderService = orderService;
+        this.orderContactInfoDTO = orderContactInfoDTO;
     }
 
     @GetMapping("/")
@@ -39,5 +46,15 @@ public class OrderController {
     public ResponseEntity<OrderDTO> saveOrder(@RequestBody OrderDTOFromFE orderDTOFromFE) throws ExecutionException, InterruptedException {
         OrderDTO orderSavedInDB = orderService.saveOrderInDb(orderDTOFromFE);
         return new ResponseEntity<>(orderSavedInDB, HttpStatus.OK);
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<OrderContactInfoDTO> getContactInfo() {
+        return new ResponseEntity<>(orderContactInfoDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/build-version")
+    public ResponseEntity<String> getBuildVersion() {
+        return new ResponseEntity<>(buildVersion, HttpStatus.OK);
     }
 }

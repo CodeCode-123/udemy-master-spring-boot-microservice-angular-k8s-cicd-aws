@@ -1,10 +1,10 @@
 package com.codecode.message.config;
 
+import com.codecode.message.dto.MessageContactDTO;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -16,7 +16,6 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
-import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
@@ -126,4 +125,8 @@ public class Config {
         return cacheManager;
     }
 
+    @Bean
+    public MessageContactDTO getMessageContactDTO() {
+        return new MessageContactDTO();
+    }
 }

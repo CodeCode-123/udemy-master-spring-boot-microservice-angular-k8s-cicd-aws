@@ -1,5 +1,6 @@
 package com.codecode.foodcatalogue.config;
 
+import com.codecode.foodcatalogue.dto.FoodCatalogueContactInfoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -41,4 +42,8 @@ public class KafkaConfig {
         return new ReplyingKafkaTemplate<>(producerFactory, repliesContainer);
     }
 
+    @Bean
+    public FoodCatalogueContactInfoDTO getFoodCatalogueContactInfoDTO() {
+        return new FoodCatalogueContactInfoDTO();
+    }
 }
