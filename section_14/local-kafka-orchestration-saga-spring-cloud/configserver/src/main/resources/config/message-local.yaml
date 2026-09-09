@@ -1,0 +1,16 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+build:
+  version: "2.0"
+
+message:
+  message: "Welcome to message related local APIs"
+  contactDetails:
+    name: "Smitha Ray"
+    email: "smitha@gmail.com"
+    onCallSupport:
+      - (666) 265-3765
+      - (666) 734-8371

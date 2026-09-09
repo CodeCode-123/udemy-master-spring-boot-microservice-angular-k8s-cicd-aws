@@ -1,0 +1,27 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ordersagadb
+      host: localhost
+      port: 27071
+      database: ordersagadb
+      repositories:
+        enabled: true
+      auto-index-creation: true
+
+build:
+  version: "2.0"
+
+order:
+  message: "Welcome to order related local APIs"
+  contactDetails:
+    name: "Smitha Ray"
+    email: "smitha@gmail.com"
+    onCallSupport:
+      - (666) 265-3765
+      - (666) 734-8371

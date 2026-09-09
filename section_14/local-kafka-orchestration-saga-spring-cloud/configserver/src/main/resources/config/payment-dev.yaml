@@ -1,0 +1,19 @@
+eureka:
+  instance:
+    preferIpAddress: true
+    hostname: eureka-0
+  client:
+    service-url:
+      defaultZone: http://eureka-0.eureka-service.default.svc.cluster.local:8761/eureka
+
+build:
+  version: "1.0"
+
+payment:
+  message: "Welcome to payment related dev APIs"
+  contactDetails:
+    name: "Reine Aishwarya"
+    email: "aishwarya@gmail.com"
+  onCallSupport:
+    - (453) 392-4829
+    - (236) 203-0384

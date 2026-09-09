@@ -1,0 +1,12 @@
+build:
+  version: "3.0"
+
+order:
+  message: "Welcome to order related APIs"
+  contactDetails:
+    name: "John Doe"
+    email: "john@gmail.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 555-1345
+
