@@ -4,8 +4,18 @@ spring:
   application:
     name: configserver
   profiles:
-    active: native
+#    active: native
+    active: git
   cloud:
-    server:
-      native:
-        search-locations: "classpath:/config"
+    config:
+      server:
+        git:
+          uri: "https://github.com/CodeCode-123/udemy-master-spring-boot-microservice-angular-k8s-cicd-aws-section14-config.git"
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+#        native:
+#          search-locations: "classpath:/config"
+#          search-locations: "file:///Users//ada1//section14-config"
+

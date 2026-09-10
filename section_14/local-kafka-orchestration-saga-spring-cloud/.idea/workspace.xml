@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ed8ead85-0c2f-4ff7-83f7-d6911e636b46" name="Changes" comment="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/configserver/src/main/resources/application.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,18 +23,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "CodeCode-123"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;CodeCode-123&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/CodeCode-123/udemy-master-spring-boot-microservice-angular-k8s-cicd-aws.git",
-    "accountId": "65994e4d-f202-4b56-8295-bccd534e6c7e"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/CodeCode-123/udemy-master-spring-boot-microservice-angular-k8s-cicd-aws.git&quot;,
+    &quot;accountId&quot;: &quot;65994e4d-f202-4b56-8295-bccd534e6c7e&quot;
   }
-}]]></component>
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -41,41 +42,41 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3J6CGOiUDdw4en27D4GdgAvoqEa" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.ConfigserverApplication.executor": "Debug",
-    "Spring Boot.EurekaApplication.executor": "Debug",
-    "Spring Boot.FoodcatalogueApplication.executor": "Debug",
-    "Spring Boot.MessageApplication.executor": "Debug",
-    "Spring Boot.OrderApplication.executor": "Debug",
-    "Spring Boot.PaymentApplication.executor": "Debug",
-    "Spring Boot.RestaurantlistingApplication.executor": "Debug",
-    "Spring Boot.UserinfoApplication.executor": "Debug",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/ada1/Desktop/GetHireTechnologies_CognizeTech/ExtraCourses/UdemyMasterSpringBootMicroserviceAngularK8sCICDAWS/sections/section_14/local-kafka-orchestration-saga-spring-cloud/configserver/src/main/resources/config",
-    "settings.editor.selected.configurable": "advanced.settings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ConfigserverApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.FoodcatalogueApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.MessageApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.OrderApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.PaymentApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.RestaurantlistingApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.UserinfoApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ada1/Desktop/GetHireTechnologies_CognizeTech/ExtraCourses/UdemyMasterSpringBootMicroserviceAngularK8sCICDAWS/sections/section_14/local-kafka-orchestration-saga-spring-cloud/configserver/src/main/resources/config&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/configserver/src/main/resources/config" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.RestaurantlistingApplication">
+  <component name="RunManager" selected="Spring Boot.UserinfoApplication">
     <configuration name="ConfigserverApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
       <module name="configserver" />
@@ -216,8 +217,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.RestaurantlistingApplication" />
         <item itemvalue="Spring Boot.UserinfoApplication" />
+        <item itemvalue="Spring Boot.RestaurantlistingApplication" />
         <item itemvalue="Spring Boot.PaymentApplication" />
         <item itemvalue="Spring Boot.OrderApplication" />
         <item itemvalue="Spring Boot.MessageApplication" />
