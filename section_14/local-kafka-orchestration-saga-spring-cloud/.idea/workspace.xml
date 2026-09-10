@@ -4,52 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed8ead85-0c2f-4ff7-83f7-d6911e636b46" name="Changes" comment="Added a Spring Cloud Config Server, centralized the microservice configuration YAML files of different environments, activated the profiles of native in the Config Server, and used the local classpath rather than git, and tested the properties of different environments using localhost:8071/&lt;microservice-name&gt;/&lt;activated-profile&gt;">
-      <change afterPath="$PROJECT_DIR$/foodcatalogue/src/main/java/com/codecode/foodcatalogue/dto/FoodCatalogueContactInfoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/message/src/main/java/com/codecode/message/dto/MessageContactDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order/src/main/java/com/codecode/order/dto/OrderContactInfoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/controller/PaymentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/dto/PaymentContactInfoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/restaurantlisting/src/main/java/com/codecode/restaurantlisting/config/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/restaurantlisting/src/main/java/com/codecode/restaurantlisting/dto/RestaurantListingContactDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/userinfo/src/main/java/com/codecode/userinfo/config/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/userinfo/src/main/java/com/codecode/userinfo/dto/UserInfoContactInfoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="ed8ead85-0c2f-4ff7-83f7-d6911e636b46" name="Changes" comment="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foodcatalogue/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/src/main/java/com/codecode/foodcatalogue/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodcatalogue/src/main/java/com/codecode/foodcatalogue/config/KafkaConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/src/main/java/com/codecode/foodcatalogue/controller/FoodCatalogueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodcatalogue/src/main/java/com/codecode/foodcatalogue/controller/FoodCatalogueController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/foodcatalogue/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/foodcatalogue/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/message/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/src/main/java/com/codecode/message/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/message/src/main/java/com/codecode/message/config/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/src/main/java/com/codecode/message/controller/MessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/message/src/main/java/com/codecode/message/controller/MessageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/message/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/message/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/order/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/src/main/java/com/codecode/order/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/order/src/main/java/com/codecode/order/config/KafkaConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/src/main/java/com/codecode/order/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order/src/main/java/com/codecode/order/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/order/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/order/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/payment/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/config/KafkaConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/service/handler/PaymentCommandHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment/src/main/java/com/codecode/payment/service/handler/PaymentCommandHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/payment/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurantlisting/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/restaurantlisting/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurantlisting/src/main/java/com/codecode/restaurantlisting/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/restaurantlisting/src/main/java/com/codecode/restaurantlisting/controller/RestaurantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userinfo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/userinfo/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userinfo/src/main/java/com/codecode/userinfo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/userinfo/src/main/java/com/codecode/userinfo/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userinfo/src/main/resources/application-dev.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/userinfo/src/main/resources/application-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/userinfo/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/userinfo/src/main/resources/application.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -294,11 +250,20 @@
       <option name="project" value="LOCAL" />
       <updated>1788978901104</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs">
+      <option name="closed" value="true" />
+      <created>1788992444874</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1788992444874</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added a Spring Cloud Config Server, centralized the microservice configuration YAML files of different environments, activated the profiles of native in the Config Server, and used the local classpath rather than git, and tested the properties of different environments using localhost:8071/&lt;microservice-name&gt;/&lt;activated-profile&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a Spring Cloud Config Server, centralized the microservice configuration YAML files of different environments, activated the profiles of native in the Config Server, and used the local classpath rather than git, and tested the properties of different environments using localhost:8071/&lt;microservice-name&gt;/&lt;activated-profile&gt;" />
+    <MESSAGE value="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs" />
   </component>
 </project>
