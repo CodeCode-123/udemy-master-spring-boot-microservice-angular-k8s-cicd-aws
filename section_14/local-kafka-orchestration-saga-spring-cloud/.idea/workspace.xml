@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed8ead85-0c2f-4ff7-83f7-d6911e636b46" name="Changes" comment="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs">
+    <list default="true" id="ed8ead85-0c2f-4ff7-83f7-d6911e636b46" name="Changes" comment="Changed spring.profiles.active from native to git, configured the git URI and related configurations; Tested the Kafka, Frontend, and Backend functions using Postman, Frontend input operations, and logs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/configserver/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/foodcatalogue/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foodcatalogue/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/message/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/message/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/order/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/payment/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/restaurantlisting/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/restaurantlisting/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/restaurantlisting/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userinfo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/userinfo/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +83,7 @@
       <recent name="$PROJECT_DIR$/configserver/src/main/resources/config" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.UserinfoApplication">
+  <component name="RunManager" selected="Spring Boot.MessageApplication">
     <configuration name="ConfigserverApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
       <module name="configserver" />
@@ -217,11 +224,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.MessageApplication" />
+        <item itemvalue="Spring Boot.OrderApplication" />
         <item itemvalue="Spring Boot.UserinfoApplication" />
         <item itemvalue="Spring Boot.RestaurantlistingApplication" />
         <item itemvalue="Spring Boot.PaymentApplication" />
-        <item itemvalue="Spring Boot.OrderApplication" />
-        <item itemvalue="Spring Boot.MessageApplication" />
         <item itemvalue="Spring Boot.FoodcatalogueApplication" />
         <item itemvalue="Spring Boot.EurekaApplication" />
         <item itemvalue="Spring Boot.ConfigserverApplication" />
@@ -259,12 +266,21 @@
       <option name="project" value="LOCAL" />
       <updated>1788992444874</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changed spring.profiles.active from native to git, configured the git URI and related configurations; Tested the Kafka, Frontend, and Backend functions using Postman, Frontend input operations, and logs">
+      <option name="closed" value="true" />
+      <created>1789057187458</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1789057187458</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added a Spring Cloud Config Server, centralized the microservice configuration YAML files of different environments, activated the profiles of native in the Config Server, and used the local classpath rather than git, and tested the properties of different environments using localhost:8071/&lt;microservice-name&gt;/&lt;activated-profile&gt;" />
     <MESSAGE value="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the spring-cloud-starter-config Maven dependency to each microservice, configured these microservices to connect to the Config Server; Added all the profile YAML files to the Config Server, configured the native search location of these YAML files, and added REST GET methods in the controller to get Build Version and Contact Info in the profiles; tested the Kafka, Frontend, and Backend functions after applying the Config Server using Postman, Frontend input operations, and logs" />
+    <MESSAGE value="Changed spring.profiles.active from native to git, configured the git URI and related configurations; Tested the Kafka, Frontend, and Backend functions using Postman, Frontend input operations, and logs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed spring.profiles.active from native to git, configured the git URI and related configurations; Tested the Kafka, Frontend, and Backend functions using Postman, Frontend input operations, and logs" />
   </component>
 </project>

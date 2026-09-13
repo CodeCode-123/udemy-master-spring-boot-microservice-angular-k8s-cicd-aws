@@ -19,3 +19,5 @@ spring:
 #          search-locations: "classpath:/config"
 #          search-locations: "file:///Users//ada1//section14-config"
 
+encrypt:
+  key: "df74e4737ec1c99dd36b32c0bd07ed321c0f2ab0a7ff20a5f24aca23e7b198eb"
