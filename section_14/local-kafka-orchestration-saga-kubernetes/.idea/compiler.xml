@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="message" />
         <module name="core" />
-        <module name="eureka" />
       </profile>
       <profile name="Annotation profile for restaurantlisting" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -34,6 +33,9 @@
         <module name="foodcatalogue" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eureka" target="25" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

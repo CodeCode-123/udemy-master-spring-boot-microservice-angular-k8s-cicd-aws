@@ -52,8 +52,6 @@ spring:
       isolation-level: READ_COMMITTED
 
 app:
-  service:
-    url: "http://userservice/user/fetchUserById/"
   kafka:
     request-topic: "fetch-user-request"
     reply-topic: "fetch-user-reply"
@@ -65,10 +63,6 @@ app:
     order-command-topic: "order-command"
     message-command-topic: "message-command"
 
-#logging:
-#  level:
-#    org.springframework.kafka: DEBUG
-#    org.springframework.kafka.listener.ConcurrentMessageListenerContainer: INFO
 logging:
   level:
     org.springframework.kafka.transaction.KafkaTransactionManager: DEBUG

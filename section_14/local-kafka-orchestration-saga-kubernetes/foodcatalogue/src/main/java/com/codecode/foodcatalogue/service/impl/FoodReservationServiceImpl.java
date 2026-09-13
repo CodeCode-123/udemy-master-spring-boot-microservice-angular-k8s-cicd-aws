@@ -7,7 +7,6 @@ import com.codecode.foodcatalogue.entity.FoodReservation;
 import com.codecode.foodcatalogue.repository.FoodItemRepo;
 import com.codecode.foodcatalogue.repository.FoodReservationRepo;
 import com.codecode.foodcatalogue.service.FoodReservationService;
-import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class FoodReservationServiceImpl implements FoodReservationService {
             int foodItemId = foodItemDTO.getId();
             Optional<FoodItem> foodItemOptional = foodItemRepo.findById(foodItemId);
             if (foodItemOptional.isEmpty()) {
-                throw new NotFoundException("FoodItem is not found by foodItemId: " + foodItemId);
+                throw new RuntimeException("FoodItem is not found by foodItemId: " + foodItemId);
             }
             FoodReservation foodReservation = convertFoodItemDTOToFoodReservation(foodItemDTO);
             foodReservation.setVeg(foodItemOptional.get().isVeg());
@@ -50,7 +49,7 @@ public class FoodReservationServiceImpl implements FoodReservationService {
     public void cancelReservation(Integer orderId) {
         List<FoodReservation> foodReservationList = foodReservationRepo.findByOrderId(orderId);
         if (foodReservationList.isEmpty()) {
-            throw new NotFoundException("Food Reservation list is not found by orderId: " + orderId);
+            throw new RuntimeException("Food Reservation list is not found by orderId: " + orderId);
         }
         foodReservationRepo.deleteByOrderId(orderId);
     }
@@ -60,7 +59,7 @@ public class FoodReservationServiceImpl implements FoodReservationService {
     public void cancelReservation(Integer orderId, List<FoodItemReservation> foodItemReservationList) {
         List<FoodReservation> foodReservationListDB = foodReservationRepo.findByOrderId(orderId);
         if (foodReservationListDB.isEmpty()) {
-            throw new NotFoundException("Food Reservation list is not found by orderId: " + orderId);
+            throw new RuntimeException("Food Reservation list is not found by orderId: " + orderId);
         }
         if (isSameFood(foodReservationListDB, foodItemReservationList)) {
             LOGGER.info("The cancel reservation command contains the same food reservation list as the record");

@@ -9,15 +9,12 @@ import com.codecode.core.dto.event.FoodReservationFailedEvent;
 import com.codecode.core.dto.event.FoodReservedEvent;
 import com.codecode.foodcatalogue.entity.FoodReservation;
 import com.codecode.foodcatalogue.service.FoodReservationService;
-import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +49,6 @@ public class FoodCommandHandler {
         }
 
         try {
-            //Test with different condition
-            //throwException();
             //save to the database
             List<FoodReservation> foodReservationList = foodReservationService.reserve(foodItemDTOList, orderId);
             FoodReservedEvent foodReservedEvent = new FoodReservedEvent(foodItemReservationList);
@@ -89,8 +84,8 @@ public class FoodCommandHandler {
         return foodItemReservation;
     }
 
-    //method for test
-    private void throwException() {
-        throw new NotFoundException();
-    }
+//    //method for test
+//    private void throwException() {
+//        throw new RuntimeException();
+//    }
 }

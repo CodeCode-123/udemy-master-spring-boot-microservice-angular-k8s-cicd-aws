@@ -4,7 +4,6 @@ import com.codecode.core.dto.RestaurantDTO;
 import com.codecode.restaurantlisting.entity.Restaurant;
 import com.codecode.restaurantlisting.mapper.RestaurantMapper;
 import com.codecode.restaurantlisting.repository.RestaurantRepo;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +43,7 @@ public class RestaurantService {
     public RestaurantDTO handleRequest(Integer restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepo.findById(restaurantId);
         if (restaurantOptional.isEmpty()) {
-            throw new NotFoundException("RestaurantDTO is not Found by restaurantId: " + restaurantId);
+            throw new RuntimeException("RestaurantDTO is not Found by restaurantId: " + restaurantId);
         }
         Restaurant restaurant = restaurantOptional.get();
         return convertToRestaurantDTO(restaurant);

@@ -44,9 +44,6 @@ public class OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    @Value("${app.service.url}")
-    private String url;
-
     @Value("${app.kafka.request-topic}")
     private String requestTopic;
 

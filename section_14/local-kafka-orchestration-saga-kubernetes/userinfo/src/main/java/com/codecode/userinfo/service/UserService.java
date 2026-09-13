@@ -3,7 +3,6 @@ package com.codecode.userinfo.service;
 import com.codecode.core.dto.UserDTO;
 import com.codecode.userinfo.entity.User;
 import com.codecode.userinfo.repository.UserRepo;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,7 +61,7 @@ public class UserService {
     public UserDTO handleRequest(Integer userId) {
         Optional<User> userOptional = userRepo.findById(userId);
         if (userOptional.isEmpty()) {
-            throw new NotFoundException("User is not Found by userId: " + userId);
+            throw new RuntimeException("User is not Found by userId: " + userId);
         }
         User user = userOptional.get();
         return convertToUserDTO(user);

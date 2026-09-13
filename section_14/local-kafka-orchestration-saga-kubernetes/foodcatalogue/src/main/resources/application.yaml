@@ -59,8 +59,6 @@ spring:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
 
 app:
-  service:
-    url: http://restaurantlisting/restaurant/fetchById/
   kafka:
     food-command-topic: "food-command"
     food-event-topic: "food-event"

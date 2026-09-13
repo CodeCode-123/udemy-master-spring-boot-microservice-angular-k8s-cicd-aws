@@ -3,8 +3,6 @@ package com.codecode.payment.service.impl;
 import com.codecode.payment.entity.Payment;
 import com.codecode.payment.repository.PaymentRepo;
 import com.codecode.payment.service.PaymentService;
-import jakarta.ws.rs.NotFoundException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentById(int paymentId) {
         Optional<Payment> paymentOptional = paymentRepo.findByOrderId(paymentId);
         if (paymentOptional.isEmpty()) {
-            throw new NotFoundException("Payment is not found by paymentId: " + paymentId);
+            throw new RuntimeException("Payment is not found by paymentId: " + paymentId);
         }
         return paymentOptional.get();
     }
@@ -41,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentByOrderId(int orderId) {
         Optional<Payment> paymentOptional = paymentRepo.findByOrderId(orderId);
         if (paymentOptional.isEmpty()) {
-            throw new NotFoundException("Payment is not found by orderId: " + orderId);
+            throw new RuntimeException("Payment is not found by orderId: " + orderId);
         }
         return paymentOptional.get();
     }

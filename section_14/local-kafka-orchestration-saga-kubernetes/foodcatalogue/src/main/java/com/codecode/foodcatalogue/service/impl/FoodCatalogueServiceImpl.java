@@ -13,14 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +30,6 @@ public class FoodCatalogueServiceImpl implements FoodCatalogueService {
 
     private final FoodItemRepo foodItemRepo;
     private final ReplyingKafkaTemplate<String, Object, Object> replyingKafkaTemplate;
-
-    @Value("${app.service.url}")
-    private String url;
-
 
     @Autowired
     public FoodCatalogueServiceImpl(FoodItemRepo foodItemRepo,

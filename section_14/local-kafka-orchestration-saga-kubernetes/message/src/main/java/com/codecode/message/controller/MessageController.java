@@ -2,7 +2,6 @@ package com.codecode.message.controller;
 
 import com.codecode.core.dto.event.MessageApprovalEvent;
 import com.codecode.core.dto.event.MessageRejectionEvent;
-import jakarta.ws.rs.Path;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.web.bind.annotation.GetMapping;
