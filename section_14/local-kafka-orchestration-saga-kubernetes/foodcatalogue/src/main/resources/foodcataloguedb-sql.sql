@@ -1,0 +1,18 @@
+USE foodcataloguedb;
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Delicious vegetarian dish', 'Vegetable Biryani', 300, 0, 1);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Succulent chicken in a creamy sauce', 'Butter Chicken', 310, 0, 1);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Mouthwatering lentil curry', 'Dal Tadka', 350, 0, 2);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Spicy and flavorful lamb curry',	'Rogan Josh', 315, 0, 2);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Crispy and spicy potato patties', 'Aloo Tikki', 500, 0, 3);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Paneer cubes marinated in tandoori spices', 'Tandoori Paneer Tikka',	900,	0,	3);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Fragrant and aromatic rice dish', 'Chicken Biryani', 120, 0, 4);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Mixed vegetable curry',	'Vegetable Korma', 110, 0, 4);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Spicy and tangy shrimp curry', 'Goan Prawn Curry', 140, 0, 5);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Fluffy Indian bread', 'Naan', 300, 0, 5);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Chicken marinated in yogurt and spices',	'Chicken Tikka', 100, 0, 6);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Aromatic rice pudding',	'Kheer', 600, 0, 6);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Savory lentil donuts', 'Medu Vada', 400, 0, 7);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Crispy crepe filled with spiced potatoes', 'Masala Dosa', 800, 0, 7);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Refreshing yogurt-based drink', 'Mango Lassi', 500, 0, 8);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (false, 'Assorted Indian bread basket', 'Basket of Rotis', 700, 0, 8);
+INSERT INTO food_item (is_veg, item_description, item_name, price, quantity, restaurant_id) VALUES (true, 'Lentils cooked with mixed spices', 'Dal Fry', 350, 0, 1);
