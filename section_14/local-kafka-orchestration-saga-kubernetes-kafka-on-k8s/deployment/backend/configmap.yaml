@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+data:
+  restaurantdb_url: jdbc:mysql://host.docker.internal:3306/restaurantdb #jdbc:mysql://127.0.0.1:3306/restaurantdb
+  foodcataloguedb_url: jdbc:mysql://host.docker.internal:3306/foodcataloguedb #jdbc:mysql://127.0.0.1:3306/foodcataloguedb
+  userdb_url: jdbc:mysql://host.docker.internal:3306/userdb #jdbc:mysql://127.0.0.1:3306/userdb
+  orderdb_url: mongodb+srv://admin:admin123456@atlas-cluster.9ghj1qt.mongodb.net/orderdb?retryWrites=true&w=majority
+  paymentdb_url: jdbc:mysql://host.docker.internal:3306/paymentdb #jdbc:mysql://127.0.0.1:3306/paymentdb
+  auto_index_creation: "true"

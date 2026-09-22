@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paymentapp
+  labels:
+    app: paymentapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paymentapp
+  template:
+    metadata:
+      labels:
+        app: paymentapp
+    spec:
+      containers:
+        - name: paymentapp
+          image: codecode123/payment-arm:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9086
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: mysql-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: mysql-password
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: paymentdb_url
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-svc:9092" # Points directly to your internal Kafka pods
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 9086
+      targetPort: 9086
+  selector:
+    app: paymentapp

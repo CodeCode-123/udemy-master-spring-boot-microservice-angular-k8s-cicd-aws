@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userapp
+  labels:
+    app: userapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userapp
+  template:
+    metadata:
+      labels:
+        app: userapp
+    spec:
+      containers:
+        - name: userapp
+          image: codecode123/userinfo-arm:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9083
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: mysql-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: mysql-password
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: userdb_url
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-svc:9092" # Points directly to your internal Kafka pods
+#      imagePullSecrets:
+#        - name: dockerhub-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 9083
+      targetPort: 9083
+  selector:
+    app: userapp

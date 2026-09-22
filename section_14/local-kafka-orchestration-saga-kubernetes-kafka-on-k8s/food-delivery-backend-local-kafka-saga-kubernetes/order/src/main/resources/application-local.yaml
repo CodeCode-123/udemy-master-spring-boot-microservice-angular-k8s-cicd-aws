@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ordersagadb
+      host: localhost
+      port: 27071
+      database: ordersagadb
+      repositories:
+        enabled: true
+      auto-index-creation: true
