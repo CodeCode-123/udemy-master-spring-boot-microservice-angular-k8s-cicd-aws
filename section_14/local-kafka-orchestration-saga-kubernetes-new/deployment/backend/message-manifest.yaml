@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messageapp
+  labels:
+    app: messageapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messageapp
+  template:
+    metadata:
+      labels:
+        app: messageapp
+    spec:
+      containers:
+        - name: messageapp
+          image: codecode123/message-arm:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9085
+#          env:
+#            - name: SPRING_DATASOURCE_USERNAME
+#              valueFrom:
+#                secretKeyRef:
+#                  name: secret
+#                  key: mysql-username
+#            - name: SPRING_DATASOURCE_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: secret
+#                  key: mysql-password
+#            - name: SPRING_DATASOURCE_URL
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: configmap
+#                  key: foodcataloguedb_url
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 9085
+      targetPort: 9085
+  selector:
+    app: messageapp
