@@ -29,21 +29,7 @@ spec:
             - name: SPRING_DATA_MONGODB_DATABASE
               value: "orderdb"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-svc:9092" # Points directly to your internal Kafka pods
-
-#            - name: MONGO_HOST
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: configmap
-#                  key: orderdb_url
-#            - name: SPRING_DATA_MONGODB_AUTO_INDEX_CREATION
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: configmap
-#                  key: auto_index_creation
-
-#      imagePullSecrets:
-#        - name: dockerhub-secret
+              value: "kafka-headless:9092" # Points directly to your internal Kafka pods
 
 ---
 apiVersion: v1

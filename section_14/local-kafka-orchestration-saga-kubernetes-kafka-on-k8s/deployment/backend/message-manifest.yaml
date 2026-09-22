@@ -22,22 +22,7 @@ spec:
             - containerPort: 9085
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-svc:9092" # Points directly to your internal Kafka pods
-#            - name: SPRING_DATASOURCE_USERNAME
-#              valueFrom:
-#                secretKeyRef:
-#                  name: secret
-#                  key: mysql-username
-#            - name: SPRING_DATASOURCE_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: secret
-#                  key: mysql-password
-#            - name: SPRING_DATASOURCE_URL
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: configmap
-#                  key: foodcataloguedb_url
+              value: "kafka-headless:9092" # Points directly to your internal Kafka pods
 
 ---
 apiVersion: v1

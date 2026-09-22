@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: bitnamilegacy/kafka:3.3.2  # Use your target version
+          image: bitnamilegacy/kafka:latest  # Use your target version
           ports:
             - containerPort: 9092
               name: client
@@ -55,6 +55,7 @@ spec:
 
             - name: ALLOW_PLAINTEXT_LISTENER
               value: "yes"
+
 ---
 apiVersion: v1
 kind: Service
@@ -69,81 +70,3 @@ spec:
       name: client
     - port: 9093
       name: controller
-
-
-
-#apiVersion: apps/v1
-#kind: StatefulSet
-#metadata:
-#  name: kafka
-#spec:
-#  serviceName: kafka-headless
-#  replicas: 3
-#  selector:
-#    matchLabels:
-#      app: kafka
-#  template:
-#    metadata:
-#      labels:
-#        app: kafka
-#    spec:
-#      containers:
-#        - name: kafka
-#          image: apache/kafka:4.0.0
-#          # Override the entrypoint command to parse the trailing digit from hostname
-#          command:
-#            - /bin/sh
-#            - -c
-#            - |
-#              # Extract the pod index (e.g., "kafka-0" becomes "0")
-#              export KAFKA_NODE_ID=${HOSTNAME##*-}
-#              # For older ZooKeeper-based setups, also set: export KAFKA_BROKER_ID=${HOSTNAME##*-}
-#
-#              # Execute the default entrypoint script
-#              exec /etc/kafka/docker/run
-#          ports:
-#            - containerPort: 9092
-#              name: kafka
-#          env:
-#            - name: KAFKA_PROCESS_ROLES
-#              value: "broker,controller"
-#            - name: KAFKA_NODE_ID
-#              valueFrom:
-#                fieldRef:
-#                  fieldPath: metadata.name
-#            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
-#              value: "0@kafka-0.kafka-headless:9093,1@kafka-1.kafka-headless:9093,2@kafka-2.kafka-headless:9093"
-#            - name: KAFKA_BOOTSTRAP_SERVERS
-#              value: "kafka-service:9092"
-#            - name: CLUSTER_ID
-#              value: "5L6g3nShT-eMCtK--X86sw"
-#          resources:
-#            requests:
-#              memory: "4Gi"
-#              cpu: "2"
-#            limits:
-#              memory: "4Gi"
-#              cpu: "2"
-#          volumeMounts:
-#            - name: data
-#              mountPath: /var/lib/kafka/data
-#  volumeClaimTemplates:
-#    - metadata:
-#        name: data
-#      spec:
-#        accessModes: [ "ReadWriteOnce" ]
-#        resources:
-#          requests:
-#            storage: 100Gi
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: kafka-service
-#spec:
-#  clusterIP: None  # <-- This makes it a Headless Service
-#  selector:
-#    app: kafka
-#  ports:
-#    - name: broker
-#      port: 9092
