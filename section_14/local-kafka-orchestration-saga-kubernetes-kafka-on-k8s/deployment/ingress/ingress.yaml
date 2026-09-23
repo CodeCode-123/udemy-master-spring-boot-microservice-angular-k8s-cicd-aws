@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+#  annotations:
+#    #Optional: Tells the controller to rewrite destination targets if necessary
+#    nginx.ingress.kubernetes.io/rewrite-target: #/$2
+spec:
+  ingressClassName: nginx
+  rules:
+#    - host: food-delivery-app.localhost
+    - http:
+        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: angular-service
+#                port:
+#                  number: 80
+
+          - path: /restaurant #(/|$)(.*) # Captures everything after /restaurant
+            pathType: Prefix #ImplementationSpecific #Prefix
+            backend:
+              service:
+                name: restaurantlisting-service
+                port:
+                  number: 9081
+
+          - path: /foodCatalogue #(/|$)(.*)
+            pathType: Prefix #ImplementationSpecific #Prefix
+            backend:
+              service:
+                name: foodcatalogue-service
+                port:
+                  number: 9082
+
+          - path: /order #(/|$)(.*)
+            pathType: Prefix #ImplementationSpecific #Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 9084
+
+          - path: /user #(/|$)(.*)
+            pathType: Prefix #ImplementationSpecific #Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 9083
+
+          - path: /message #(/|$)(.*)
+            pathType: Prefix #ImplementationSpecific #Prefix
+            backend:
+              service:
+                name: message-service
+                port:
+                  number: 9085
