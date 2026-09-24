@@ -1,5 +1,5 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://${MONGO_HOST:localhost}:27017/ordersagadb
-      auto-index-creation: true
+  mongodb:
+    uri: mongodb+srv://admin:admin123456@atlas-cluster.9ghj1qt.mongodb.net/orderdb?retryWrites=true&w=majority
+    host: atlas-cluster.9ghj1qt.mongodb.net
+    database: orderdb

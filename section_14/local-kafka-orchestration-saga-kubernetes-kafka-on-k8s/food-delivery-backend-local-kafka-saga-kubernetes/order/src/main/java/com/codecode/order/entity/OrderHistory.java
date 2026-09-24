@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("ordersaga_history")
+@Document(collection = "ordersaga_history")
 public class OrderHistory {
     @Indexed
     private Integer orderHistoryId;

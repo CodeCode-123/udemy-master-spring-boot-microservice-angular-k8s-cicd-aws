@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("ordersaga")
+@Document(collection = "ordersaga")
 public class Order {
     @Indexed
     private Integer orderId;
