@@ -1,0 +1,18 @@
+server:
+  port: 9094
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: order
+
+app:
+  service:
+    url: "http://userservice/user/fetchUserById/"
+#  cors:
+#    allowed-origins: "http://localhost:4200"
+#    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+#    allowed-headers: "*"
+#    allow-credentials: true
+
