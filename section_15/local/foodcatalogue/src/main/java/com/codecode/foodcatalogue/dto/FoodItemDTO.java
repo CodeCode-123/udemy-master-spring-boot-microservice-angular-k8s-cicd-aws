@@ -1,11 +1,9 @@
 package com.codecode.foodcatalogue.dto;
 
-import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+
+@Data
 public class FoodItemDTO {
     private int id;
     private String itemName;

@@ -30,13 +30,13 @@ public class FoodCatalogueService {
         this.restTemplate = restTemplate;
     }
 
-    private FoodItem mapFoodItemDTOToFoodItem(FoodItemDTO foodItemDTO) {
+    public FoodItem mapFoodItemDTOToFoodItem(FoodItemDTO foodItemDTO) {
         FoodItem foodItem = new FoodItem();
         BeanUtils.copyProperties(foodItemDTO, foodItem);
         return foodItem;
     }
 
-    private FoodItemDTO mapFoodItemToFoodItemDTO(FoodItem foodItem) {
+    public FoodItemDTO mapFoodItemToFoodItemDTO(FoodItem foodItem) {
         FoodItemDTO foodItemDTO = new FoodItemDTO();
         BeanUtils.copyProperties(foodItem, foodItemDTO);
         return foodItemDTO;
