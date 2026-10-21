@@ -3,14 +3,12 @@ package com.codecode.order.entity;
 import com.codecode.order.dto.FoodItemDTO;
 import com.codecode.order.dto.RestaurantDTO;
 import com.codecode.order.dto.UserDTO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Document("order")
 public class Order {
     private Integer orderId;

@@ -40,15 +40,9 @@ public class OrderService {
         return restTemplate.getForObject(url + userId, UserDTO.class);
     }
 
-    private OrderDTO mapOrderToOrderDTO(Order order) {
+    public OrderDTO mapOrderToOrderDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
         BeanUtils.copyProperties(order, orderDTO);
         return orderDTO;
-    }
-
-    private Order mapOrderDTOToOrder(OrderDTO orderDTO) {
-        Order order = new Order();
-        BeanUtils.copyProperties(orderDTO, order);
-        return order;
     }
 }
